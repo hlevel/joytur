@@ -1,0 +1,123 @@
+#@layout("广告位管理")
+#define main()
+<style>
+    .upload-icon{
+        padding: 18px;
+        width: 54px;
+        height: 54px;
+        position: relative;
+        border: 1px dashed #e2e2e2;
+        text-align: center;
+        float: left;
+        cursor:pointer;
+    }
+    .upload-icon i{
+        font-size: 40px;
+        color: #009688;
+    }
+    .upload-icon span {
+        font-size: 10px;
+    }
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+    }
+    .image-div {
+        position: relative;
+        width: 92px;
+        height: 92px;
+        float: left;
+        margin-right: 7px;
+    }
+    .image-div i{
+        position: absolute;
+        margin: -10px 0px 0px 80px;
+        font-size: 18px;
+        color: #5CACEE;
+        cursor:pointer;
+    }
+    .image-div-default {
+        position: absolute;
+        bottom: 0;
+        background-color: #5CACEE;
+        color: #fff;
+        font-size: 10px;
+        padding: 1px;
+        text-align: center;
+    }
+</style>
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/extension/adv/save">
+    	<input type="hidden" name="extensionAdv.id"  value="#(extensionAdv.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">广告位类型</label>
+            <div class="layui-input-inline">
+                <select name="extensionAdv.advType">
+                	#for(item : joyDict.getDictList('adv_banner_type'))
+                  	<option value="#(item.dictValue)" #if(extensionAdv!=null && item.dictValue==(extensionAdv.advType.toString())) selected="selected" #end >#(item.dictName)</option>
+                  	#end
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">广告图片</label>
+            <div class="layui-upload-list">
+            	<input type="hidden" name="extensionAdv.advImage" id="advImage" value="#(extensionAdv.advImage ??)" />
+                <div id="upload-img-advImage">
+                	#if(extensionAdv.advImage ??)
+                	<div id="upload-show-advImage" ><div class="image-div"><i onclick="delImg('advImage')" class="layui-icon">&#x1007;</i><img src="#image(extensionAdv.advImage)" alt="" class="layui-upload-img"></div></div>
+                	#end
+                </div>
+                <div class="upload-icon" id="upload-advImage" #if(extensionAdv.advImage ??) style="display: none" #end >
+                    <i class="layui-icon">&#xe681;</i>
+                    <span>点击上传</span>
+                </div>
+            </div>
+            <div class="layui-form-mid layui-word-aux">建议规格986x384</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入备注" class="layui-textarea" name="extensionAdv.description">#(extensionAdv.description ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end
+#define js()
+<script>
+	var $;
+	layui.use(['upload', 'layer'], function() {
+	    $ = layui.jquery;
+	    var upload = layui.upload;
+	  	//图片上传
+	    upload.render({
+	        elem: '#upload-advImage',
+	        url: '#(ctxAd)/extension/adv/upload',
+	        multiple: true,
+	        number: 1,
+	        before: function(obj){
+	            obj.preview(function(index, file, result){
+	                $('#upload-img-advImage').append('<div id="upload-show-advImage"><div class="image-div"><i class="layui-icon" onclick="delImg(\'advImage\')" >&#x1007;</i><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></div></div>')
+	                $('#upload-advImage').hide();
+	            });
+	        },
+	        done: function(res){
+	            $('#advImage').val(res.data);
+	        }
+	    });
+	
+	});
+	
+	function delImg(id){
+		$('#upload-show-'+id).remove();
+		$('#upload-'+id).show();
+	}
+</script>
+#end

@@ -1,0 +1,32 @@
+#@layout("500错误")
+#define css()
+	<style>
+        .page-error {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-height: calc(100vh - 110px);
+            margin-bottom: 0;
+        }
+    </style>
+#end
+#define main()
+<body>
+    <div class="page-error" style="color: #009688">
+    	<!-- 
+	    <div style="font-size: 120px" text="#(code ??)">500</div>
+    	 -->
+	    <div style="font-size: 24px" text="#(message ??)">#(errorMessage)</div>
+	</div>
+</body>
+#end

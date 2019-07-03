@@ -1,0 +1,34 @@
+#@layout("商品分类")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/goods/category/save">
+        <input type="hidden" name="category.id"  value="#(category.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="category.categoryName"  placeholder="请输入商品分类名称" value="#(category.categoryName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-inline">
+                <textarea placeholder="请输入描述" class="layui-textarea" name="category.description">#(category.description ??)</textarea>
+            </div>
+            <div class="layui-form-mid layui-word-aux">20字符</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="category.status" value="1" title="开启" #if(category != null && category.status==1) checked #end>
+                <input type="radio" name="category.status" value="0" title="禁用" #if(!category??) checked #end #if(category != null && category.status==0) checked #end>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end

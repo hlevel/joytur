@@ -1,0 +1,305 @@
+#@layout("参数管理")
+#define css()
+<style>
+    .upload-icon{
+        padding: 18px;
+        width: 54px;
+        height: 54px;
+        position: relative;
+        border: 1px dashed #e2e2e2;
+        text-align: center;
+        float: left;
+        cursor:pointer;
+    }
+    .upload-icon i{
+        font-size: 40px;
+        color: #009688;
+    }
+    .upload-icon span {
+        font-size: 10px;
+    }
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+    }
+    .image-div {
+        position: relative;
+        width: 92px;
+        height: 92px;
+        float: left;
+        margin-right: 7px;
+    }
+    .image-div i{
+        position: relative;
+        margin: -10px 0px 0px 80px;
+        font-size: 18px;
+        color: #5CACEE;
+        cursor:pointer;
+    }
+    .image-div-default {
+        position: absolute;
+        bottom: 0;
+        background-color: #5CACEE;
+        color: #fff;
+        font-size: 10px;
+        padding: 1px;
+        text-align: center;
+    }
+</style>
+#end
+#define main()
+<body class="timo-layout-page">
+	<div class="layui-card">
+		<div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>系统参数配置</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+		<div class="layui-card-body" >
+			<div class="layui-tab layui-tab-brief" lay-filter="component-tabs-hash">
+				<ul class="layui-tab-title">
+					<li class="layui-this" lay-id="11">前端设置</li>
+					<li lay-id="22" class="">后端设置</li>
+					<li lay-id="33" class="">业务设置</li>
+					<li lay-id="44" class="">腾讯OSS</li>
+				</ul>
+				<div class="layui-tab-content" >
+					<div class="layui-tab-item layui-show">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">WAP站名</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="WAP_DOMIAN_NAME"  placeholder="请输入WAP站名" value="#(config.WAP_DOMIAN_NAME ??)">
+						            </div>
+						            <!-- <div class="layui-input-inline layui-input-company">KB</div> -->
+						            <div class="layui-form-mid layui-word-aux">WAP站点名称</div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">首页短文</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="WAP_HOME_PHRASE" max="15"  placeholder="请输入短文" value="#(config.WAP_HOME_PHRASE ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">闯关说明左边短文描述 15字内 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">闯关描述</label>
+						            <div class="layui-input-inline">
+						                <textarea placeholder="请输入闯关描述" class="layui-textarea" name="WAP_HOME_DESCRIPTION">#(config.WAP_HOME_DESCRIPTION ??)</textarea>
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">闯关描述说明 </div>
+						        </div>
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存更新</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						    	<div class="layui-form-item">
+						            <label class="layui-form-label">后端站名</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_DOMAIN_NAME"  placeholder="请输入后端站名" value="#(config.SYS_DOMAIN_NAME ??)">
+						            </div>
+						            <!-- <div class="layui-input-inline layui-input-company">KB</div> -->
+						            <div class="layui-form-mid layui-word-aux">网站标题显示名称</div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">网站LOGO</label>
+						            <div class="layui-upload-list">
+						            	<input type="hidden" name="SYS_CONFIG_LOGO" id="SYS_CONFIG_LOGO" value="#(config.SYS_CONFIG_LOGO ??)" />
+						                <div id="upload-img-SYS_CONFIG_LOGO">
+						                	#if(config.SYS_CONFIG_LOGO ??)
+						                	<div id="upload-show-SYS_CONFIG_LOGO" ><div class="image-div"><i class="layui-icon" onclick="delImg('SYS_CONFIG_LOGO')" >&#x1007;</i><img src="#image(config.SYS_CONFIG_LOGO)" alt="" class="layui-upload-img"></div></div>
+						                	#end
+						                </div>
+						                <div class="upload-icon" id="upload-SYS_CONFIG_LOGO" #if(config.SYS_CONFIG_LOGO ??) style="display: none" #end >
+						                    <i class="layui-icon">&#xe681;</i>
+						                    <span>点击上传</span>
+						                </div>
+						            </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">网站关键字</label>
+						            <div class="layui-input-inline">
+						                <textarea placeholder="请输入网站关键字" class="layui-textarea" name="SYS_CONFIG_KEYWORD">#(config.SYS_CONFIG_KEYWORD ??)</textarea>
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">META关键字,用于seo优化 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">网站描述</label>
+						            <div class="layui-input-inline">
+						                <textarea placeholder="请输入网站描述" class="layui-textarea" name="SYS_CONFIG_DESCRIPTION">#(config.SYS_CONFIG_DESCRIPTION ??)</textarea>
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">META描述,用于seo优化 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">版权信息</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_COPYRIGHT"  placeholder="请输入版权信息" value="#(config.SYS_CONFIG_COPYRIGHT ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">例:@2019 by信息 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">备案信息</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_ICP"  placeholder="请输入备案信息" value="#(config.SYS_CONFIG_ICP ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">例:京ICP证030173号 </div>
+						        </div>
+						        <!-- 
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">允许IP访问</label>
+						            <div class="layui-input-inline">
+						                <textarea placeholder="请输入访问IP" class="layui-textarea" name="SYS_CONFIG_ALLOWIP">#(config.SYS_CONFIG_ALLOWIP ??)</textarea>
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">绑定只能访问IP地址多个请用|分隔例: 192.168.1.1|192.168.1.2 </div>
+						        </div>
+						         -->
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存更新</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						    	<div class="layui-form-item">
+						            <label class="layui-form-label">智能营业</label>
+						            <div class="layui-input-inline">
+						                <input type="checkbox" name="SYS_CLOSING_SWITCH" lay-skin="switch" #if(config.SYS_CLOSING_SWITCH ?? && config.SYS_CLOSING_SWITCH.toInt()==1)checked="checked" #end lay-text="开启|关闭">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">是否开启智能营业模式</div>
+						        </div>
+						    	<div class="layui-form-item">
+						            <label class="layui-form-label">营业时间</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text"  id="SYS_CLOSING_TIME" name="SYS_CLOSING_TIME"  placeholder="歇业时间段" value="#(config.SYS_CLOSING_TIME ??)" >
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">每天在线充值营业时间段</div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">提现限制</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_ALLOW_CASH"  placeholder="最低提现金额" value="#(config.SYS_ALLOW_CASH ??)">
+						            </div>
+						            <!-- <div class="layui-input-inline layui-input-company">KB</div> -->
+						            <div class="layui-form-mid layui-word-aux">用户返佣最低提现金额限制</div>
+						        </div>
+						        #--
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">未成功送</label>
+						            <div class="layui-input-inline">
+						                <input type="checkbox" name="SYS_GIFT_PACKED" lay-skin="switch" #if(config.SYS_GIFT_PACKED ?? && config.SYS_GIFT_PACKED.toInt()==1)checked="checked" #end lay-text="开启|关闭">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">是否开启闯关未成功充值满商品金额也送</div>
+						        </div>
+						        --#
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">失败次数</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_LOGINERR"  placeholder="请输入失败次数" value="#(config.SYS_CONFIG_LOGINERR ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">登录后台失败次数锁定 </div>
+						        </div>
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存更新</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">所属地域</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_TENCENT_ENDPOINT"  placeholder="请输入所属地域" value="#(config.SYS_CONFIG_TENCENT_ENDPOINT ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">访问域名地址(例:ap-chengdu)</div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">SecretId</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_TENCENT_SECRETID"  placeholder="请输入签名KEY" value="#(config.SYS_CONFIG_TENCENT_SECRETID ??)">
+						            </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">SecretKey</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_TENCENT_SECRETKEY"  placeholder="请输入签名秘钥" value="#(config.SYS_CONFIG_TENCENT_SECRETKEY ??)">
+						            </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">BucketName</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="SYS_CONFIG_TENCENT_BUCKETNAME"  placeholder="请输入存储桶名称" value="#(config.SYS_CONFIG_TENCENT_BUCKETNAME ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">存储桶空间名称</div>
+						        </div>
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存更新</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+#end
+#define js()
+<script type="text/javascript" src="#(ctxAdSt)/js/plugins/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="#(ctxAdSt)/js/plugins/jquery.cookie.js"></script>
+<script>
+	var $;
+    layui.use(['upload', 'layer', 'laydate'], function() {
+        $ = layui.jquery;
+        var upload = layui.upload;
+        var laydate = layui.laydate;
+        
+        //图片上传
+        upload.render({
+            elem: '#upload-SYS_CONFIG_LOGO',
+            url: '#(ctxAd)/config/upload',
+            multiple: true,
+            number: 1,
+            before: function(obj){
+                obj.preview(function(index, file, result){
+                    $('#upload-img-SYS_CONFIG_LOGO').append('<div id="upload-show-SYS_CONFIG_LOGO"><div class="image-div"><i class="layui-icon" onclick="delImg(\'SYS_CONFIG_LOGO\')" >&#x1007;</i><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></div></div>')
+                    $('#upload-SYS_CONFIG_LOGO').hide();
+                });
+            },
+            done: function(res){
+                $('#SYS_CONFIG_LOGO').val(res.data[0]);
+            }
+        });
+        
+        //执行一个laydate实例
+        laydate.render({
+        	elem: '#SYS_CLOSING_TIME', //指定元素
+       		type: 'time',
+     		range: true //或 range: '~' 来自定义分割字符
+        });
+        
+        $('.layui-tab-title li').click(function(){
+            $.cookie('_cfg_tab', $(this).attr('lay-id'));
+        });
+        
+        var cfgtab =  $.cookie('_cfg_tab');
+        if(cfgtab != undefined){
+        	$('[lay-id="'+cfgtab+'"]').click();
+        }
+
+    });
+    
+    function delImg(id){
+    	$('#upload-show-'+id).remove();
+    	$('#upload-'+id).show();
+    }
+</script>
+#end

@@ -1,0 +1,112 @@
+#@layout("菜单管理")
+#define css()
+	<link rel="stylesheet" href="#(ctxAdSt)/lib/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+#end
+#define main()
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/menu/save" >
+        <input type="hidden" name="sysMenu.id" value="#(sysMenu.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysMenu.title"  placeholder="请输入标题" value="#(sysMenu.title ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">URL地址</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysMenu.url"  placeholder="请输入URL地址" value="#(sysMenu.url ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限标识</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysMenu.permission"  placeholder="请输入URL地址" value="#(sysMenu.permission ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-inline">
+                <input class="layui-input icon-input" type="text" name="sysMenu.icon"  placeholder="请输入菜单图标" th:value="#(sysMenu.icon ??)">
+            </div>
+            <i class="icon-show #(sysMenu.icon ??)" style="line-height: 38px;"></i>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-inline">
+                <input class="layui-input select-tree" data-url="#(ctxAd)/menu/list" data-value="#(pSysMenu.id ?? 0)" type="text" name="sysMenu.pid"  placeholder="请输入父级菜单" value="#(pSysMenu.title ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="sysMenu.type">
+                	#for(item : joyDict.getDictList('menu_type'))
+                  	<option value="#(item.dictValue)" #if(sysMenu!=null && item.dictValue==(sysMenu.type+'')) selected="selected" #end >#(item.dictName)</option>
+                  	#end
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <select class="select-sort" name="sysMenu.sort" data-url="#(ctxAd)/menu/sortList" data-id="#(sysMenu.id ??)" data-sort="#(sysMenu.sort ??)" lay-verify="sort" ></select>
+            </div>
+            <div class="layui-input-info">（之后）</div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+#end
+#define js()
+	<script type="text/javascript" src="#(ctxAdSt)/js/plugins/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="#(ctxAdSt)/lib/zTree_v3/js/jquery.ztree.core.min.js"></script>
+	<script type="text/javascript" src="#(ctxAdSt)/js/timoTree.js"></script>
+	<script type="text/javascript">
+	    layui.use(['form'], function () {
+	        window.form = layui.form;
+	        // 初始化排序下拉选项
+	        var pid = $(".select-tree").data('value');
+	        if (pid != undefined && pid != ''){
+	            sortRender({id: pid});
+	        }
+	    });
+	
+	    // 初始化下拉树
+	    $.fn.selectTree({
+	        rootTree: '顶级菜单',
+	        // 选中后事件
+	        onSelected: sortRender
+	    });
+	
+	    // 更新渲染排序下拉选项
+	    function sortRender(treeNode) {
+	        var pid = treeNode.id;
+	        var sort = $(".select-sort");
+	        var id = sort.data('id') ? sort.data('id') : 0;
+	        var url = sort.data('url') + "?pid=" + pid + "&notId=" + id;
+	        $.get(url, function (result) {
+	            var options = '';
+	            var sortNum = Object.keys(result).length;
+	            if(pid === $(".select-tree").data('value') && sort.data('sort')){
+	                sortNum = sort.data('sort') - 1;
+	            }
+	            result[0] = "首位";
+	            for(var key in result){
+	                var selected = sortNum == key ? "selected=''" : "";
+	                options += "<option value='"+ key +"' " + selected + ">"+ result[key] +"</option>";
+	            }
+	            sort.html(options);
+	            form.render('select');
+	        });
+	    }
+	
+	    // 监听变动图标
+	    $(".icon-input").on("input propertychange", function(){
+	        $(".icon-show").attr("class", "icon-show "+$(this).val());
+	    });
+	</script>
+#end

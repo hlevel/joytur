@@ -1,0 +1,56 @@
+#@layout("角色编辑")
+#define main()
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/user/save" >
+        <input type="hidden" name="sysUser.id" value="#(sysUser.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysUser.userName" #if(sysUser ??) disabled="disabled" #end  placeholder="请输入用户名" value="#(sysUser.userName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysUser.nickName" placeholder="请输入用户昵称" value="#(sysUser.nickName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">用户密码</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="password" name="sysUser.password" placeholder="请输入用户密码">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="password" name="sysUser.confirm" placeholder="再一次输入密码">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysUser.phone" placeholder="请输入电话号码" value="#(sysUser.phone ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysUser.email" placeholder="请输入邮箱" value="#(sysUser.email ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择性别</label>
+            <div class="layui-input-inline">
+            	#for(item : joyDict.getDictList('sex'))
+                <input type="radio" name="sysUser.sex" value="#(item.dictValue)" title="#(item.dictName)" #if(item.dictValue.toInt()==(sysUser.sex??1)) checked="checked" #end  /><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>#(item.dictName)</div></div>
+            	#end
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+#end

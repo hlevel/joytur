@@ -1,0 +1,174 @@
+#@layout("收款监控管理")
+#define main()
+<body class="timo-layout-page">
+	<div class="layui-card">
+		<div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>收款监控配置</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+		<div class="layui-card-body" >
+			<div class="layui-tab layui-tab-brief" lay-filter="component-tabs-hash">
+				<ul class="layui-tab-title">
+					<li class="#if(tabid=='11')layui-this#end" lay-id="11">收件邮箱设置(#if(mailSettingStatus==0)<font color="red">未设置</font>#else已设置#end)</li>
+					<li class="#if(tabid=='22')layui-this#end" lay-id="22">APP端设置(#if(appSettingStatus==0)<font color="red">未设置</font>#else已设置#end)</li>
+					<li class="#if(tabid=='33')layui-this#end" lay-id="33">微信web网页设置(#if(webSettingStatus==0)<font color="red">未设置</font>#else已设置#end)</li>
+				</ul>
+				<div class="layui-tab-content" >
+					<div class="layui-tab-item #if(tabid=='11')layui-show#end">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						    	<input type="hidden" name="layid" value="#(layid)" />
+						    	<div class="layui-form-item">
+						            <label class="layui-form-label">发件邮箱</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="MONITOR_SEND_MAIL"  placeholder="请输入收通知邮件邮箱" value="#(config.MONITOR_SEND_MAIL ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">请填写您的发件163邮箱 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">邮箱密码</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="MONITOR_SEND_MAIL_PWD"  placeholder="请输入收通知邮件邮箱" value="#(config.MONITOR_SEND_MAIL_PWD ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">请填写您的发件163邮箱密码 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">收件邮箱</label>
+						            <div class="layui-input-inline">
+						                <input class="layui-input" type="text" name="MONITOR_RECEIPT_MAIL"  placeholder="请输入收通知邮件邮箱" value="#(config.MONITOR_RECEIPT_MAIL ??)">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">用户付款后通知到您邮箱来确认交易.不能和发件箱相同! </div>
+						        </div>
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存更新</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+					<div class="layui-tab-item #if(tabid=='22')layui-show#end">
+						<div class="layui-form timo-compile" wid100="">
+					        <div class="layui-form-item">
+					            <label class="layui-form-label">监控端状态</label>
+					            <div class="layui-form-mid layui-word-aux">#(appStatus)</div>
+					        </div>
+					        <div class="layui-form-item">
+					            <label class="layui-form-label">最后心跳</label>
+					            <div class="layui-form-mid layui-word-aux">#(appLastHeartbeat)</div>
+					        </div>
+					        <div class="layui-form-item">
+					            <label class="layui-form-label">配置数据</label>
+					            <div class="layui-form-mid layui-word-aux">#(appMonitorUrl)</div>
+					        </div>
+					        <div class="layui-form-item">
+					            <label class="layui-form-label">配置二维码</label>
+					            <div class="layui-input-inline">
+					                <img alt="app扫描二维码" src="#(appMonitorQrCode)">
+					            </div>
+					            <div class="layui-form-mid layui-word-aux">请打开安卓手机监控APP软件扫描配置 </div>
+					        </div>
+					        <div class="layui-form-item">
+					            <label class="layui-form-label">APP监控</label>
+					            <div class="layui-form-mid"><a href="#(ctxAdSt)/v.apk">点击下载</a>&nbsp;(请安装安卓7.0以下手机,并添加永驻内存)</div>
+					        </div>
+						</div>
+					</div>
+					<div class="layui-tab-item #if(tabid=='33')layui-show#end">
+						<div class="layui-form timo-compile" wid100="">
+						    <form action="#(ctxAd)/config/save">
+						    	<input type="hidden" name="layid" value="#(layid)" />
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">微信端状态</label>
+						            <div class="layui-form-mid layui-word-aux">微信web端未登录,请扫码登录</div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">微信登录码</label>
+						            <div class="layui-input-inline">
+						                <img alt="app扫描二维码" width="220" height="220"  id="websynimg" src="#(ctxAdSt)/images/img_notfund.png">
+						            </div>
+						            <div class="layui-form-mid layui-word-aux">请用您收款微信扫描登录 </div>
+						        </div>
+						        <div class="layui-form-item">
+						            <label class="layui-form-label">微信消息</label>
+						            <div class="layui-form-mid" id="websynmsg" style="color: red"></div>
+						        </div>
+						        <div class="layui-form-item timo-finally">
+						            <button class="layui-btn wechat-syn"  ><i class="fa fa-weixin"></i>获取登录二维码</button>
+						        </div>
+						    </form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+#end
+#define js()
+<script type="text/javascript" src="#(ctxAdSt)/js/plugins/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="#(ctxAdSt)/js/plugins/jquery.cookie.js"></script>
+<script>
+	var $;
+	var websyn;
+	
+    layui.use(['layer'], function() {
+        $ = layui.jquery;
+        
+        $('.layui-tab-title li').click(function(){
+        	$.cookie('_cfg_tab', $(this).attr('lay-id'));
+        });
+        
+        var cfgtab =  $.cookie('_cfg_tab');
+        if(cfgtab != undefined){
+        	$('[lay-id="'+cfgtab+'"]').click();
+        }
+        
+        $(".wechat-syn").on("click", function (e) {
+            e.preventDefault();
+            /*
+            var checked = [];
+            $.post(e.target.href, checked.join("&"), function (result) {
+                $.fn.Messager(result);
+            });
+            
+            $.get('#(ctxAd)/recharge/monitor/webwechat', function (result) {
+            	if(result.code==70){
+            		
+            	}else if(result.code==71){
+            		
+            	}
+            });
+            */
+            wechatsyn();
+        });
+        
+    });
+   
+    function wechatsyn(){
+    	console.log(websyn);
+    	if(websyn == undefined){
+	    	websyn = setInterval("wechatsyn();", 2000);
+    	}
+    	
+    	$.get('#(ctxAd)/recharge/monitor/webwechat', function (result) {
+        	if(result.code==70){
+        	}else if(result.code==71){
+        		
+        	}else if(result.code==72){
+        		$('#websynimg').attr('src',result.data);
+        	}else if(result.code==73){
+        		$('#websynimg').attr('src',result.data);
+        	}else if(result.code==74){
+        		
+        	}else if(result.code==75){
+        		
+        	}else if(result.code==76){
+        		$('#websynimg').attr('src',result.data);
+        	}
+       		$('#websynmsg').text(result.msg);
+        });
+    	
+    }
+    
+</script>
+#end

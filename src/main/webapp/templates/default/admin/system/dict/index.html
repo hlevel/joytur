@@ -1,0 +1,90 @@
+#@layout("字典管理")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i> 字典管理</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+                <div class="pull-left layui-form-pane timo-search-box">
+                	<!-- 
+                    <div class="layui-inline">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block timo-search-status">
+                            <select class="timo-search-select" name="status" mo:dictKey="SEARCH_STATUS" mo-selected="${param.status}"></select>
+                        </div>
+                    </div>
+                	 -->
+                    <div class="layui-inline">
+                        <label class="layui-form-label">字典标识</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sysDictionary.dictCode" value="#(sysDictionary.dictCode ??)" placeholder="请输入字典标识" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">字典标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sysDictionary.dictName" value="#(sysDictionary.dictName ??)" placeholder="请输入字典标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right screen-btn-group">
+                    <button class="layui-btn open-popup" data-title="添加字典" data-url="#(ctxAd)/dict/add"  data-size="510,450">
+                        <i class="fa fa-plus"></i> 添加</button>
+                    <div class="btn-group">
+                        <button class="layui-btn">操作<span class="caret"></span></button>
+                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                        	<!-- 
+                            <dd><a class="ajax-status" href="#(ctxAd)/dict/status/ok">启用</a></dd>
+                            <dd><a class="ajax-status" href="#(ctxAd)/dict/status/freezed">冻结</a></dd>
+                        	 -->
+                            <dd><a class="ajax-status" href="#(ctxAd)/dict/delete">删除</a></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox">
+                            <i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th class="sortable" data-field="dictCode">字典标识</th>
+                    <th class="sortable" data-field="dictName">字典标题</th>
+                    <th class="sortable" data-field="dictValue">字典值</th>
+                    <th class="sortable" data-field="createTime">创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+	                <tr>
+	                    <td><label class="timo-checkbox"><input type="checkbox" th:value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+	                    <td>#(item.dictCode)</td>
+	                    <td>#(item.dictName)</td>
+	                    <td>#(item.dictValue)</td>
+	                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+	                    <td>
+	                        <a class="open-popup" data-title="编辑字典" data-url="#(ctxAd)/dict/edit?id=#(item.id)" data-size="510,450" href="#">编辑</a>
+	                        <!-- <a class="open-popup" data-title="详细信息" data-url="#(ctxAd)/dict/detail?id=#(item.id)"  data-size="800,600" href="#">详细</a> -->
+	                        <a class="ajax-get" data-msg="您是否确认删除" href="#(ctxAd)/dict/delete?ids=#(item.id)">删除</a>
+	                    </td>
+	                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

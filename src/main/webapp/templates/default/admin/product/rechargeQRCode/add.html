@@ -1,0 +1,122 @@
+#@layout("充值二维码")
+#define main()
+<style>
+    .upload-icon{
+        padding: 18px;
+        width: 54px;
+        height: 54px;
+        position: relative;
+        border: 1px dashed #e2e2e2;
+        text-align: center;
+        float: left;
+        cursor:pointer;
+    }
+    .upload-icon i{
+        font-size: 40px;
+        color: #009688;
+    }
+    .upload-icon span {
+        font-size: 10px;
+    }
+    .layui-upload-img {
+        width: 92px;
+        height: 92px;
+    }
+    .image-div {
+        position: relative;
+        width: 92px;
+        height: 92px;
+        float: left;
+        margin-right: 7px;
+    }
+    .image-div i{
+        position: absolute;
+        margin: -10px 0px 0px 80px;
+        font-size: 18px;
+        color: #5CACEE;
+        cursor:pointer;
+    }
+    .image-div-default {
+        position: absolute;
+        bottom: 0;
+        background-color: #5CACEE;
+        color: #fff;
+        font-size: 10px;
+        padding: 1px;
+        text-align: center;
+    }
+</style>
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/recharge/qrcode/save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">充值规则</label>
+            <div class="layui-input-inline">
+                <select name="qrCode.rechargeRuleId">
+                    #for(rule : rules)
+                    <option value="#(rule.key)" >#(rule.value)</option>
+                    #end
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">收款二维码</label>
+            <div class="layui-upload-list">
+            	<input type="hidden" name="qrCode.qrcodeImage" id="qrcodeImage" value="#(qrCode.qrcodeImage ??)" />
+                <div id="upload-img-qrcodeImage">
+                	#if(qrCode.qrcodeImage ??)
+                	<div id="upload-show-qrcodeImage" ><div class="image-div"><i onclick="delImg('qrcodeImage')" class="layui-icon">&#x1007;</i><img src="#image(qrCode.qrcodeImage)" alt="" class="layui-upload-img"></div></div>
+                	#end
+                </div>
+                <div class="upload-icon" id="upload-qrcodeImage" #if(qrCode.qrcodeImage ??) style="display: none" #end >
+                    <i class="layui-icon">&#xe681;</i>
+                    <span>点击上传</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">实际金额</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="qrCode.transAmt"  placeholder="请输入二维码对应金额" value="#(qrCode.transAmt ??)">
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end
+#define js()
+<script>
+	var $;
+	layui.use(['upload', 'layer'], function() {
+	    $ = layui.jquery;
+	    var upload = layui.upload;
+	  	//图片上传
+	    upload.render({
+	        elem: '#upload-qrcodeImage',
+	        url: '#(ctxAd)/recharge/qrcode/upload',
+	        multiple: true,
+	        number: 1,
+	        before: function(obj){
+	            obj.preview(function(index, file, result){
+	                $('#upload-img-qrcodeImage').append('<div id="upload-show-qrcodeImage"><div class="image-div"><i class="layui-icon" onclick="delImg(\'qrcodeImage\')" >&#x1007;</i><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></div></div>')
+	                $('#upload-qrcodeImage').hide();
+	            });
+	        },
+	        done: function(res){
+	            $('#qrcodeImage').val(res.data[1]);
+	            $('#upload-show-qrcodeImage img').attr('src',res.data[0]);
+	        }
+	    });
+	
+	});
+	
+	function delImg(id){
+		$('#upload-show-'+id).remove();
+		$('#upload-'+id).show();
+	}
+</script>
+#end

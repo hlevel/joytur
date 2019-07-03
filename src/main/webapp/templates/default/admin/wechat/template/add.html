@@ -1,0 +1,84 @@
+#@layout("模版管理")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form class="layui-form" action="#(ctxAd)/template/save" >
+        <input type="hidden" name="wechatTemplate.id" value="#(wechatTemplate.id ??)"/>
+        #if(wechatTemplate==null || (wechatTemplate?? && wechatTemplate.eventType==2))
+        <div class="layui-form-item">
+            <label class="layui-form-label">关键字</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" lay-verify="required" name="wechatTemplate.eventKeywords"   placeholder="请输入关键字(多个,隔开)" value="#(wechatTemplate.eventKeywords ??)">
+            </div>
+        </div>
+        #end
+        <div class="layui-form-item">
+            <label class="layui-form-label">回复类型</label>
+            <div class="layui-input-inline">
+                <select id="responseType" name="wechatTemplate.responseType" lay-filter="responseType" >
+                	#for(item : joyDict.getDictList('template_response_type'))
+                  	<option value="#(item.dictValue)" #if(wechatTemplate!=null && item.dictValue==(wechatTemplate.responseType.toString()??'1')) selected="selected" #end >#(item.dictName)</option>
+                  	#end
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item text" #if(wechatTemplate==null||wechatTemplate.responseType!=1) style="display: none;" #end >
+            <label class="layui-form-label">消息文本</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入消息文本" class="layui-textarea" style="width: 300px" name="wechatTemplate.responseText" >#(wechatTemplate.responseText ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item imgtext" #if(wechatTemplate!=null&&wechatTemplate.responseType!=3) style="display: none;" #end >
+            <label class="layui-form-label">图文标题</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="wechatTemplate.responseTitle"  placeholder="请输入消息标题" value="#(wechatTemplate.responseTitle ??)">
+            </div>
+        </div>
+        <div class="layui-form-item imgtext" #if(wechatTemplate!=null&&wechatTemplate.responseType!=3) style="display: none;" #end >
+            <label class="layui-form-label">文章地址</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="wechatTemplate.responseArticleUrl"  placeholder="请输入文章地址" value="#(wechatTemplate.responseArticleUrl ??)">
+            </div>
+        </div>
+        <div class="layui-form-item imgtext img" #if(wechatTemplate!=null&&wechatTemplate.responseType!=3&&wechatTemplate.responseType!=2) style="display: none;" #end  >
+            <label class="layui-form-label">图片</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="wechatTemplate.responsePicUrl"  placeholder="请输入消息图片" value="#(wechatTemplate.responsePicUrl ??)">
+            </div>
+        </div>
+        <div class="layui-form-item imgtext" #if(wechatTemplate!=null&&wechatTemplate.responseType!=3) style="display: none;" #end >
+            <label class="layui-form-label">图文描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入消息描述" class="layui-textarea" style="width: 300px" name="wechatTemplate.responseDescription" >#(wechatTemplate.responseDescription ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit" ><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end
+#define js()
+	<script type="text/javascript">
+	layui.use(['form','jquery'], function () {
+		var $ = layui.jquery;
+		var form = layui.form; //加载form模块
+		form.on('select(responseType)', function(data){
+			
+			$('.text').hide();
+			$('.img').hide();
+			$('.imgtext').hide();
+			
+			if(data.value==1){
+				$('.text').show();
+			}else if(data.value==2){
+				$('.img').show();
+			}else if(data.value==3){
+				$('.imgtext').show();
+			}
+		});
+	});
+	</script>
+#end

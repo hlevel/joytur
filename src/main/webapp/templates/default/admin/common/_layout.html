@@ -1,0 +1,30 @@
+#define layout(title)
+<!DOCTYPE html>
+<html>
+<head>
+	<title>#(joyConfig.getConfigValue('SYS_DOMAIN_NAME','JoyTur')) - #(title)</title>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="#(ctxAdSt)/favicon.ico" type="image/x-icon">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<!-- 引入css -->
+	<link rel="stylesheet" href="#(ctxAdSt)/css/plugins/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+	<link rel="stylesheet" href="#(ctxAdSt)/lib/layui-v2.3.0/css/layui.css" media="all">
+	<link rel="stylesheet" href="#(ctxAdSt)/css/main.css" media="all">
+	
+	<!-- 引入自定义css -->
+	#@css?()
+</head>
+	#@main()
+	<script src="#(ctxAdSt)/lib/layui-v2.3.0/layui.js" charset="utf-8"></script>
+	<script src="#(ctxAdSt)/js/main.js" charset="utf-8"></script>
+	<script src="#(ctxAdSt)/js/valid.js" charset="utf-8"></script>
+	#@js?()
+	
+</html>
+#end

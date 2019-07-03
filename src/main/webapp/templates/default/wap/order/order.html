@@ -1,0 +1,314 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>请扫码完成支付</title>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        .head {
+            border-bottom: 1px solid #DDDDDD;
+            text-align: center;
+            height: 60px;
+            line-height: 60px;
+            color: #3E3A39;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .head img {
+            position: relative;
+            top: 5px;
+            left: -8px;
+        }
+
+        .juzhongde {
+            width: 360px;
+            margin: 0 auto;
+        }
+
+        .jines {
+            text-align: center;
+            padding: 18px 0;
+        }
+
+        .jines span {
+            color: #E71F19;
+        }
+
+        .jines .fangda {
+            font-size: 24px;
+            color: #010000;
+            padding-bottom: 10px;
+        }
+
+        .jines p {
+            color: #666666;
+            font-size: 15px;
+        }
+
+        .daojishi {
+            text-align: center;
+            color: #000000;
+            font-size: 14px;
+            padding-bottom: 10px;
+        }
+
+        .erwema {
+            width: 270px;
+            margin: 0 auto;
+            border: 2px solid #DDDDDD;
+            border-radius: 10px;
+        }
+
+        .erwema img {
+            width: 205px;
+            height: 205px;
+            text-align: center;
+        }
+
+        .erwema p {
+            padding: 30px 35px 5px 35px;
+        }
+
+        .dingdan {
+            text-align: center;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .saowenzi {
+            width: 205px;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        .saowenzi div {
+            float: left;
+        }
+
+        .saowenzi .tupains img {
+            width: 38px;
+            height: 38px;
+            position: relative;
+            top: 4px;
+        }
+
+        .saowenzi .wenzis {
+            width: 143px;
+            margin-left: 18px;
+            font-size: 16px;
+            height: 45px;
+            overflow: hidden;
+        }
+
+        .xixitshi {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .msgbox {
+            position: absolute;
+            top: 0;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .msgboxx {
+            position: relative;
+            top: 40%;
+            left: 0px;
+            right: 0px;
+            width: 273px;
+            padding: 30px 0px;
+            background: #fff;
+            margin: 0 auto;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .msgbox button, .msgboxbutton {;
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            margin: 20px auto 0px auto;
+            width: 130px;
+            border-width: 0px;
+            border-radius: 22px;
+            color: #fff;
+            background: RGBA(47, 158, 34, 1);
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none
+        }
+
+        #tipdiv {
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            opacity: 0.9;
+            -moz-opacity: 0.9;
+            filter: alpha(opacity=90);
+            z-index: 10;;
+            top: 0;
+            left: 0;
+            position: fixed;
+            display: none;
+        }
+
+        #tipdiv-box {
+            width: 100%;
+            height: 100%;
+            background: url('/tip.png?1') no-repeat;
+            background-size: 100%;
+            z-index: 10;
+        }
+
+    </style>
+</head>
+<body>
+<div class="juzhongde">
+
+    <div class="head">
+        <img src="#(ctxWapSt)/h5css/images/wechat.png" style="height:26px;">微信
+
+    </div>
+    <div class="jines">
+        <p class="fangda">请付款<span>#(rechargeOrder.realTransAmt ??)</span>元</p>
+        #if(rechargeOrder.actionType==2)
+        <p>（请 <b style="color:red;">转账</b> 付款 <b style="color:red;">#(rechargeOrder.realTransAmt ??)</b> 元,否则不到账!）</p>
+		#end
+    </div>
+    <div class="daojishi">
+        订单请在倒计时 <b style="font-size:18px;color:red;" id="miaosu">#(time ??)</b> 秒内完成支付
+    </div>
+    <div class="erwema">
+        <p><img src="#(rechargeOrder.qrcodeImage)"></p>
+        <div class="dingdan">充值订单: #(rechargeOrder.orderNo ??)</div>
+
+        <div class="saowenzi">
+            <div class="tupains"><img src="#(ctxWapSt)/h5css/images/saoma.png"></div>
+            <div class="wenzis" style="float:right;"> 请使用微信扫一扫
+                或长按二维码识别
+            </div>
+        </div>
+
+        <div style="clear:both;height:20px;"></div>
+
+    </div>
+
+</div>
+<div class="xixitshi" style="display: none;">
+    <div style="background:#000;opacity:0.2;width:100%;height:100%;">
+    </div>
+    <div class="msgbox">
+        <div class="msgboxx">
+            <p>请 <b style="color:red;">转账</b> 付款 <b style="color:red;">380.00</b> 元,否则不到账!</p>
+            <button onclick="hides();">我知道了</button>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="#(ctxWapSt)/h5js/jquery.js"></script>
+<script type="text/javascript" src="#(ctxWapSt)/js/layer/layer.js"></script>
+<script type="text/javascript">
+    var time = #(time ??);
+    var orderid = '2019020621405891906100';
+    var t = null;
+    
+    function hides() {
+        $(".xixitshi").hide();
+    }
+
+    function daojijian() {
+        time--;
+        if (time < 0) {
+            window.location.href = window.location.href + "&notishi=1";
+            clearTimeout(t);
+            return;
+        }
+
+        $("#miaosu").html(time);
+
+        if (time % 2 == 0) {
+            qingqiu();
+        }
+
+        t = setTimeout("daojijian()", 1000);
+    }
+
+    function qingqiu() {
+        $.ajax({
+            type: 'POST',
+            url: "#(ctx)/wap/recharge/order/paystate",
+            data: {id: "#(rechargeOrder.id)"},
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+                    if (data.code) {
+                        if (data.code == 200) {
+                            clearTimeout(time);
+                            layer.msg('支付成功', {
+                            	icon: 1,
+                            	time: 1000,
+                            	end:function(){
+                            		window.location.href = "#(ctx)/wap";
+                           		 }
+                            	});
+                            
+                            return;
+                        } else if (data.code == 314) {
+                            clearTimeout(time);
+                            layer.msg('支付失败,超时', {
+                            	icon: 2,
+                            	time: 1000,
+                            	end:function(){
+                            		window.location.href = "#(ctx)/wap";
+                           		 }
+                            	});
+
+                            return;
+                        } else if (data.code == 300) { //订单不存在
+                        	clearTimeout(time);
+                        	window.location.href = "#(ctx)/wap";
+                            return;
+                        }
+                    }
+
+                }
+            }
+        });
+
+    }
+
+    $(function () {
+
+        if (time >= 0) {
+            t = setTimeout("daojijian()", 1000);
+        } else {
+
+            setTimeout(function () {
+                window.location.href = window.location.href;
+            }, 3000);
+
+        }
+    });
+</script>
+</body>
+</html>

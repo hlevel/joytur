@@ -1,0 +1,67 @@
+#@layout("菜单管理")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i> 日志管理</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+                <div class="pull-left layui-form-pane timo-search-box">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日志名称	</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sysOperLog.title" value="#(sysOperLog.title)" placeholder="请输入日志名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                #if(joyConfig.isAdPerm(yaAdmin, 'sys.operlog.delete'))
+                <div class="pull-right screen-btn-group">
+                    <a class="layui-btn ajax-get" data-msg="您是否确认清空日志" href="#(ctxAd)/operlog/delete"><i class="fa fa-trash"></i> 清空日志</a>
+                </div>
+                #end
+            </div>
+            <table class="layui-table timo-table timo-table-fixed">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox">
+                            <i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th class="sortable" data-field="name">日志名称</th>
+                    <th class="sortable" data-field="requestRri">请求地址</th>
+                    <th class="sortable" data-field="method">请求方法</th>
+                    <th class="sortable" data-field="remoteAddr">请求IP</th>
+                    <th class="sortable" data-field="consumeMs">耗时(ms)</th>
+                    <th class="sortable" data-field="createUserName">操作人</th>
+                    <th class="sortable" data-field="createTime">记录时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+                <tr>
+                    <td><label class="timo-checkbox"><input type="checkbox" value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+                    <td>#(item.title)</td>
+                    <td>#(item.requestUri ??)</td>
+                    <td>#(item.requestMethod ??)</td>
+                    <td>#(item.remoteAddr ??)</td>
+                    <td>#(item.consumeMs ??)</td>
+                    <td>#(item.createUserName)</td>
+                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

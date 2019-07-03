@@ -1,0 +1,58 @@
+#include("../common/header.html")
+<body>
+	<div id="container" style="background:#F7F7F7;">
+		<div style="max-height: none;">
+			<div class="coins">
+				<text>我的游戏币余额</text>
+				<div class="flex coinamt" >
+					<img class="coin" src="#(ctxWapSt)/h5css/images/coin.png" alt="">
+					<text>#(gameAccount.avbAmt.toInt() ?? 0)个</text>
+				</div>
+			</div>
+			<div class="membertitle">充值金额</div>
+			<div class="pricelist between">
+				#for(item : rechargeRules)
+				<div class="priceitem" ruleId="#(item.id)">
+					<div style="padding-top: 0.5rem;padding-bottom: 0.25rem;font-size:1.8rem; font-weight: 550;" >
+					#number(item.transAmt,"#.###")<text style='font-size:0.8rem;font-weight: nomarl;'>元</text>
+					</div>
+					<div class="flex coinnumber" >
+						<img width="12px" height="12px" style="vertical-align: middle;" src="#(ctxWapSt)/h5css/images/coin.png" alt="">
+						<text>#number(item.transAfterAmt,"#.###")个</text>
+					</div>
+				</div>
+				#end
+			</div>
+		</div>
+		<div class="membertitle">支付方式</div>
+		<div class="wechatpay flex">
+			<img src="#(ctxWapSt)/h5css/images/wechat.png" alt="">	
+			<div>微信支付</div>	
+		</div>
+		<form method="post" action="#(ctx)/wap/recharge/order/payment">
+			<input type="hidden" name="ruleId" id="ruleId"/>
+			<div class="pay gopay" level="2" id="recharge">立即充值</div>
+		</form>
+	</div>
+</body>
+<script>
+$(document).ready(function (){
+	$('.priceitem').click(function(){
+        $('#ruleId').val($(this).attr('ruleId'));
+		$(this).toggleClass('this-card').siblings().removeClass('this-card');
+	});
+
+	$('#recharge').click(function () {
+	    var ruleId = $('#ruleId').val();
+	    var selCard = $('.this-card');
+	    
+		if (ruleId === undefined || ruleId === '' || selCard.length === 0) {
+            layer.msg('请选择充值金额');
+            return;
+		}
+	    
+		$('form').submit();
+    })
+});
+</script>
+</html>

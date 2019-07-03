@@ -1,0 +1,58 @@
+#@layout("闯关规则")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/goods/rule/save">
+        <input type="hidden" name="goodsRule.id"  value="#(goodsRule.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">规则名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="goodsRule.ruleName"  placeholder="请输入闯关规则名称" value="#(goodsRule.ruleName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">关卡难度</label>
+            <div class="layui-input-block">
+				<table class="layui-table" >
+					<thead>
+						<tr>
+							<th width="30px">关卡</th>
+							<th>击中</th>
+							<th>难度</th>
+							<th>时间(秒)</th>
+						</tr>
+					</thead>
+					<tbody>
+						#for(level : joyDict.getDictList('goods_rule_level_type'))
+						<tr>
+							<td>#(level.dictName)</td>
+							<td><input class="layui-input" maxlength="2" type="text" name="quant_#(level.dictValue)" autocomplete="off" placeholder="数量" value="#(diffMap['level_'+level.dictValue]['quant'] ??)"></td>
+							<td>
+								<select name="diff_#(level.dictValue)">
+				                	#for(item : joyDict.getDictList('goods_rule_diff_type'))
+				                  	<option value="#(item.dictValue)" #if(diffMap!=null && item.dictValue==(diffMap['level_'+level.dictValue]['diff'].toString())) selected="selected" #end >#(item.dictName)</option>
+				                  	#end
+				                </select>
+							</td>
+							<td><input class="layui-input" maxlength="2" type="text" name="second_#(level.dictValue)" autocomplete="off"  placeholder="秒" value="#(diffMap['level_'+level.dictValue]['second'] ??)"></td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+			</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="goodsRule.status" value="1" title="开启" #if(goodsRule != null && goodsRule.status==1) checked #end>
+                <input type="radio" name="goodsRule.status" value="0" title="禁用" #if(!goodsRule??) checked #end #if(goodsRule != null && goodsRule.status==0) checked #end>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end

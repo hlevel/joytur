@@ -1,0 +1,39 @@
+#@layout("角色授权列表")
+#define css()
+	<style>
+        a{
+            color: #009688;
+        }
+        a:hover{
+            color: #004a43;
+            text-decoration: underline;
+        }
+    </style>
+#end
+#define main()
+<div class="timo-detail-page">
+	<table class="layui-table">
+		<thead>
+           <tr>
+               <th>用户名</th>
+               <th>用户昵称</th>
+               <th>电话</th>
+           </tr>
+		</thead>
+		<tbody>
+			#for(item : userList)
+			<tr>
+               <td>#(item.userName)</td>
+               <td>#(item.nickName)</td>
+               <td>#(item.phone)</td>
+           </tr>
+           #end
+           #if(userList.size() == 0)
+           <tr>
+               <td style="text-align: center" colspan="3">未有分配该角色的用户</td>
+			</tr>
+		   #end
+		</tbody>
+	</table>
+</div>
+#end

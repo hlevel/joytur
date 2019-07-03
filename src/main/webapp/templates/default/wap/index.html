@@ -1,0 +1,336 @@
+#include("common/header.html")
+<script type="text/javascript">
+	//调用微信JS api 支付
+	function callpay(obj)
+	{
+		var paytype = 1;
+		let money = $(obj).attr('money');
+		var ua = window.navigator.userAgent.toLowerCase();
+		if(paytype==1 && ua.match(/MicroMessenger/i) == 'micromessenger'){
+			if (typeof WeixinJSBridge == "undefined"){
+			    if( document.addEventListener ){
+			        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+			    }else if (document.attachEvent){
+			        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+			    }
+			}else{
+				$.ajax({
+					type: "GET",
+					url: "{php echo $this->createMobileUrl('pay')}",
+					data: {money:money},
+					dataType: "json",
+					success: function(data){
+						var jsApiParameters = data;
+						WeixinJSBridge.invoke(
+							'getBrandWCPayRequest',
+							jsApiParameters,
+							function(res){
+								WeixinJSBridge.log(res.err_msg);
+								window.location.reload();
+							}
+						);
+					}
+				});
+			}
+		}else if(paytype==1 && ua.match(/MicroMessenger/i) != 'micromessenger'){
+			$.ajax({
+				type: "GET",
+				url: "{php echo $this->createMobileUrl('pay')}",
+				data: {money:money},
+				dataType: "json",
+				success: function(data){
+					location.href=data.mweb_url
+				}
+			});
+		}else{
+			$.ajax({
+				type: "GET",
+				url: "{php echo $this->createMobileUrl('pay')}",
+				data: {money:money},
+				dataType: "json",
+				success: function(data){
+					console.log(data);
+					if(data.code==1){
+						window.location.href=data.url;
+					}
+
+				}
+			});
+		}
+	}
+
+</script>
+<style type="text/css">
+	.title{
+		overflow:hidden;
+		text-overflow: ellipsis;    
+		white-space: nowrap;
+    	width: 90%;
+	}
+</style>
+<body>
+	<audio src="#(ctxWapSt)/audio/bg_index2_audio.mp3" id="bgms" controls="true" autoplay="true" loop="true" hidden="true"></audio>
+	<script type="text/javascript">
+		document.addEventListener('WeixinJSBridgeReady', function() {
+			var audio = document.getElementById('bgms'); 
+			
+			if(localStorage.getItem('audio')==2){
+				audio.pause();// 暂停
+				$(".noticeR").html('<img src="#(ctxWapSt)/h5css/images/closeV.png" alt="">');
+			}else{
+				audio.play();
+			}
+	        $(".noticeR").click(function(){
+				if(audio!==null){ 
+					if(audio.paused){ 
+						audio.play();// 播放 
+						localStorage.setItem('audio', 1);
+						$(".noticeR").html('<img src="#(ctxWapSt)/h5css/images/openV.png" alt="">');
+					}else{
+						audio.pause();// 暂停
+						localStorage.setItem('audio', 2);
+						$(".noticeR").html('<img src="#(ctxWapSt)/h5css/images/closeV.png" alt="">');
+					}
+				} 
+	        })
+	    });
+	</script>
+	<div id="container">
+		<div class="top" style="background: url(#(ctxWapSt)/h5css/images/bg.png) no-repeat;background-size: 100% 84%;">
+			<div class="notice between">
+				<div class="noticeL flex">
+					<img class="notImg" src="#(ctxWapSt)/h5css/images/notice.png" alt="">
+					<div class="slider" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >
+						#for(o : goodsOrderList)
+						<div class="li" id="n_#(o.id)" onclick="clicks(this)">恭喜 #(o.nick_name) #if(o.order_type==1)闯关成功#else满额未中也送#end! 赢得 #(o.goods_name)(#(o.recommend)) 奖品</div>
+						#end
+					</div>
+				</div>
+				<div class="noticeR flex"><img src="#(ctxWapSt)/h5css/images/openV.png" alt=""></div>
+			</div>
+			<img class="ban" src="#image(joyConfig.getAdvImage(2),'/static/default/wap/h5css/images/ban.png')"></img>
+			<div class="care between">
+				<div class="careL">#(joyConfig.getConfigValue('WAP_HOME_PHRASE',''))</div>
+				<div class="careR" onclick="clicks(this)" id="explainbtn">闯关购说明</div>
+			</div>
+		</div>
+		<div class="flex tabbarlist">
+			<div class="tabbar" onclick="tabbarlist(this)" data-id="0">全部</div>
+			#for(category : goodsCategoryList)
+			<div class="tabbar" onclick="tabbarlist(this)" data-id="#(category.id)">#(category.categoryName)</div>
+			#end
+		</div>
+		<div class="doo goodslist" id="block_0" >
+			#for(g : goodsList)
+			<div class="goods" onclick="play(this)" gid="#(g.id)" price="#(g.scorePrice)">
+        		<div class="goodsdetail column">
+        		<img src="#image(g.goodsImage)" alt="">
+        		<div class="marketprice">市场价￥#number(g.mktPrice,"#.##")</div>
+        		<div class="title">#(g.goodsName)</div>
+        		<div class="model">#(g.recommend)</div>
+        		</div>
+        		<div class="btn">#(g.scorePrice)游戏币闯关购</div>
+        	</div>
+        	#end
+			<!-- 
+       		<p style="text-align: center;width:100%;font-size:15px;color:#333">暂无数据</p>
+			 -->        	
+       	</div>
+       	#for(catid : goodsMap)
+       	<div class="doo goodslist" id="block_#(catid.key)" >
+      	#if(goodsMap[catid.key].size() == 0)
+      		<p style="text-align: center;width:100%;font-size:15px;color:#333">暂无数据</p>
+       	#else
+			#for(g : goodsMap[catid.key])
+			<div class="goods" onclick="play(this)" gid="#(g.id)" price="#(g.mktPrice)">
+        		<div class="goodsdetail column">
+        		<img src="#image(g.goodsImage)" alt="">
+        		<div class="marketprice">市场价￥#number(g.mktPrice,"#.##")</div>
+        		<div class="title">#(g.goodsName)</div>
+        		<div class="model">#(g.recommend)</div>
+        		</div>
+        		<div class="btn">#(g.scorePrice)游戏币闯关购</div>
+        	</div>
+        	#end
+        #end
+			<!-- 
+       		<p style="text-align: center;width:100%;font-size:15px;color:#333">暂无数据</p>
+			 -->        	
+       	</div>
+       	#end
+		<img src="#(ctxWapSt)/h5css/images/try.png" onclick="window.location.href='#(ctx)/wap/game/taste'" class="try" alt="" />	
+	</div>
+
+	#include("common/footer.html")
+	
+	<!-- 遮罩层 -->
+	<div class="shadow" style="display:none"></div>
+	<div class="notices" id="notices" style="display: none;">
+		<div class="closeNotices" onclick="closeNotice(this)" id="closeNotice">✕</div>
+		<div class="content a">
+		</div>
+	</div>
+	<div class="notices" id="explain" style="display: none;">
+		<div class="closeNotices" onclick="closeNotice(this)" id="closeExplain">✕</div>
+		<div class="content">
+			<!-- #(joyConfig.getConfigValue('WAP_HOME_DESCRIPTION','暂无描述')) -->
+			1.请闯关成功朋友不要着急客服会36小时内加游戏好友赠送皮肤给大家<br/><br/>
+			2.网络不好加载加载游戏失败已经扣款,系统会1小时内退还游戏币<br/><br/>
+			3.如果您玩满市场价金额还未成功,请在个人中心选取免费赠送
+		</div>
+	</div>
+	<div class="recharge" id="recharge" style="display: none;">
+		<div class="closeNotices" onclick="closeNotice(this)" id="closecharge">✕</div>
+		<div class="column">
+			<img class="chargeimg" src="#(ctxWapSt)/h5css/images/recharge.png" alt="">
+			<span>游戏币不足</span>
+			<div class="payBtn" onclick="buy()">去充值</div>
+		</div>
+	</div>
+	<div class="notices" id="consumption" style="display: none;">
+		<div class="closeNotices" onclick="closeNotice(this)" id="closeConsumption">✕</div>
+		<div class="content a">
+			<div style="text-align:center;margin-top:3vw;" id="continueToEnterText" ></div>
+			<div style="background:#FB1F7F;width:40vw;height:10vw;line-height:10vw;border-radius: 5vw;margin:6vw  auto 3vw;text-align:center;color:#ffffff;" id="continueToEnter" goodsid="" >确认闯关</div>
+		</div>
+	</div>
+	<div class="notices" id="buy" style="display: none;max-height: none;">
+		<div class="closeNotices" onclick="closeNotice(this)" id="closebuy">✕</div>
+		<div class="pricetitle">#(joyConfig.getConfigValue('WAP_CONFIG_NAME','JoyTur'))收银台</div>
+		<div style="color:#000000;margin:0.5rem 0 -0.5rem;text-align: center;">
+			<!-- 
+			<span>【扫码支付后请等待页面自动刷新完成】</span>
+			 -->
+		</div>
+		<div class="flex coins">
+			<text>当前账户：</text>
+			<img class="coin" src="#(ctxWapSt)/h5css/images/coin.png" alt="">
+			<text>0 游戏币</text>
+		</div>
+		<div class="pricelist between">
+			<div class="priceitem flex" money="5" onclick="callpay(this)">
+				<text>5</text>
+				<text>游戏币</text>
+			</div>
+			<div class="priceitem flex" money="10" onclick="callpay(this)">
+				<text>10</text>
+				<text>游戏币</text>
+			</div>
+			<div class="priceitem flex" money="10" onclick="callpay(this)">
+				<text>20</text>
+				<text>游戏币</text>
+			</div>
+			<div class="priceitem flex" money="10" onclick="callpay(this)">
+				<text>22</text>
+				<text>游戏币</text>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(".doo").hide();
+	$("#block_0").show();
+	$(document).ready(function (){
+        var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
+        var nScrollTop = 0;   //滚动到的当前位置
+        var nDivHight = $("#container").height();
+        console.log(nDivHight)
+        $("#container").scroll(function(){
+        	nScrollHight = $(this)[0].scrollHeight;
+        	nScrollTop = $(this)[0].scrollTop;
+        	if(nScrollTop + nDivHight >= nScrollHight){
+        		// alert("滚动条到底部了");
+        		console.log("到底了");
+        	}
+        });
+        $(".tabbarlist>div:nth-child(1)").addClass("selTab")
+
+        //继续消费
+        $("#continueToEnter").click(function(){
+        	$(".shadow").css("display","none");
+    		$("#container").removeClass("blur");
+        	$("#consumption").css("display","none");
+        	window.location.href="#(ctx)/wap/game?gid="+$(this).attr("goodsid");
+        });
+    });
+    function tabbarlist(obj){
+    	var id = $(obj).attr('data-id');
+    	$(".doo").hide();
+    	$("#block_"+id).show();
+    	$(obj).addClass("selTab").siblings().removeClass("selTab");
+    }
+	function closeNotice(obj){
+		$(".shadow").css("display","none");
+		$("#container").removeClass("blur");
+		if($(obj).attr("id")=="closeNotice"){
+			$("#notices").css("display","none");
+		}else if($(obj).attr("id")=="closeExplain"){
+			$("#explain").css("display","none");
+		}else if($(obj).attr("id")=="closecharge"){
+			$("#recharge").css("display","none");
+		}else if($(obj).attr("id")=="closebuy"){
+			$("#buy").css("display","none");
+		}else if($(obj).attr("id")=="closeConsumption"){
+			$("#consumption").css("display","none");
+		}
+	}
+	function clicks(obj){
+		if($(obj).attr("id")!="explainbtn"){
+			$(".shadow").css("display","block");
+			$("#notices").css("display","block");
+			$("#container").addClass("blur");
+			/*
+			$.ajax({
+				type: "GET",
+				url: "#(ctx)/wap/notice",
+				data: {nid:$(obj).attr("id")},
+				dataType: "json",
+				success: function(data){
+					$("#notices .content").html(data.data);
+				}
+			});
+			*/
+			
+			$("#notices .content").html($("#"+$(obj).attr("id")).html());
+		}else{
+			$(".shadow").css("display","block");
+			$("#explain").css("display","block");
+			$("#container").addClass("blur");
+		}
+	}
+	function play(obj){
+		$.ajax({
+			type: "GET",
+			url: "#(ctx)/wap/member/detail",
+			dataType: "json",
+			success: function(data){
+				var mymoney = data.balance;
+				var gprice = $(obj).attr("price");
+				if(mymoney>=gprice){
+					var gid = $(obj).attr("gid")
+					
+					var acctx = '您当前游戏币:' + mymoney + '<br/>本次闯关消耗:' + gprice;
+					
+					$('#continueToEnter').attr('goodsid', gid);
+					$('#continueToEnterText').html(acctx);
+					
+					$(".shadow").css("display","block");
+					$("#consumption").css("display","block");
+					$("#container").addClass("blur");
+				}else{
+					$(".shadow").css("display","block");
+					$("#recharge").css("display","block");
+					$("#container").addClass("blur");
+				}
+			}
+		});	
+	}
+	
+	function buy(){
+		//$("#recharge").css("display","none");
+		//$("#buy").css("display","block");
+		window.location.href="#(ctx)/wap/recharge/order";
+	}
+</script>
+</html>

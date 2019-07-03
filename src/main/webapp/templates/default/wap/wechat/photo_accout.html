@@ -1,0 +1,94 @@
+#include("../common/header.html")
+<body>
+    <div id="container" style="background-color:#F0EFED">
+        <div class="qrcodetop">
+            <p>上传账号截图说明</p>      
+            <p>上传账号截图：</p>
+            <p>1.打开游戏-登陆到主界面-点击左上角头像到个人主页-截图当前显示界面</p>
+            <p>2.在个人主页-右上角设置下拉点击复制名字</p>
+            <p>3.提交后请耐心等待,客服将加您为好友赠送您皮肤</p>
+        </div>
+        <form id="uploadForm" enctype="multipart/form-data">
+        <input type="hidden" name="addName" id="addName" value="#(wechatMemberAddr.addrArea ??)" />
+        <div class="qrcodetop">
+            <input type="text" placeholder="请粘贴您复制的游戏名字" name="realName" id="realName" autocomplete="off" value="#(wechatMemberAddr.realName ??)" />
+        </div>
+        <div class="upPhoto column">
+            <input type="file" id="file" class="file-btn" name="image">
+                <div class="photos column">
+                    <img class="example" src="#(ctxWapSt)/h5css/images/upexample.png" alt=""> 
+                    <img src="#(cashImg)"  id="img">
+                </div>
+            </input>
+        </div>
+        <div class="getcash">提交</div>
+        </form>
+    </div>
+
+</body>
+<script>
+    $(document)[0].title="账号截图";
+    $(document).ready(function(){
+        var pic = '#(cashImg)';
+        if(pic.length>0){
+            $("#img").show();
+            $(".example").hide();
+        }
+    });
+
+
+    $("#file").on("change",function(){
+        var file = $("#file")[0].files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function () {
+            if (fileReader.readyState == fileReader.DONE) {
+                var path = fileReader.result
+                $("#img").attr('src', path);
+                $(".example").css("display",'none')
+                $("#img").css("display",'block')
+                $.ajax({
+                    url: '#(ctx)/wap/member/addr/upload',
+                    type: 'POST',
+                    cache: false,
+                    data: new FormData($('#uploadForm')[0]),
+                    processData: false,
+                    contentType: false
+                }).done(function(res) {
+                	if(res.code==200){
+                		$('#addName').val(res.data);
+                	}
+                	console.log(1,res);
+                }).fail(function(res) {
+                	console.log(2,res);
+                });
+            }
+        };
+        fileReader.readAsDataURL(file);
+    })
+    $(".getcash").click(function(){
+    	var realname = $('#realName').val();
+    	var addname = $('#addName').val();
+    	if(realname==''){
+    		layer.msg("请填写您游戏名字"); return;
+    	}
+    	
+    	if(addname==''){
+    		layer.msg("请上传您游戏账号截图"); return;
+    	}
+    	
+        $.ajax({
+            type: "POST",
+            url: "#(ctx)/wap/member/addr/confirm",
+            dataType: "json",
+            data: {'realname': realname,'addname': addname},
+            success: function(data){
+                layer.msg(data.msg);
+                if(data.code==200){
+                	layer.msg("提交成功!");
+                   	setTimeout("window.location.href='#(ctx)/wap/member';",1500);
+                }
+            }
+        });
+    })
+</script>
+</html>

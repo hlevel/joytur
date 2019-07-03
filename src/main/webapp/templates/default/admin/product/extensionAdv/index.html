@@ -1,0 +1,77 @@
+#@layout("充值二维码")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>广告位管理</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+            	<div class="pull-left layui-form-pane timo-search-box">
+            		<div class="layui-inline">
+                        <label class="layui-form-label">广告位类型</label>
+                        <div class="layui-input-block timo-search-status">
+                            <select class="timo-search-select" name="extensionAdv.advType" >
+                            	<option value="">选择</option>
+                            	#for(item : joyDict.getDictList('adv_banner_type'))
+                            	<option value="#(item.dictValue)" #if(extensionAdv.advType!=null && item.dictValue==extensionAdv.advType.toString()) selected="selected" #end >#(item.dictName)</option>
+                            	#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right screen-btn-group">
+                    <button class="layui-btn open-popup" data-title="添加广告位" data-url="#(ctxAd)/extension/adv/add"   data-size="500,420"><i class="fa fa-plus"></i>添加广告位</button>
+                    <div class="btn-group">
+                        <button class="layui-btn">操作<span class="caret"></span></button>
+                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                            <dd><a class="ajax-status" href="#(ctxAd)/extension/adv/status/1" >启用</a></dd>
+                            <dd><a class="ajax-status" href="#(ctxAd)/extension/adv/status/0" >禁用</a></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox"><i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th>广告位类型</th>
+                    <th>图片</th>
+                    <th>状态</th>
+                    <th>描述</th>
+                    <th class="sortable" data-field="createTime">创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+	                <tr >
+	                    <td><label class="timo-checkbox"><input type="checkbox" value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+                        <td>#(joyDict.getDictLabel(item.advType.toString(),'adv_banner_type','未知'))</td>
+                        <td><img alt="图像" src="#image(item.advImage)"></td>
+                        <td>#(joyDict.getDictLabel(item.status.toString(),'status','未知'))</td>
+	                    <td>#(item.description)</td>
+	                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                        	<a class="open-popup popup-edit" data-title="编辑广告位" data-url="#(ctxAd)/extension/adv/edit?id=#(item.id)"  data-size="500,420" href="#">编辑</a>
+                            <a class="ajax-get" data-msg="您是否确定删除" href="#(ctxAd)/extension/adv/delete?ids=#(item.id)">删除</a>
+                        </td>
+	                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

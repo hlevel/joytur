@@ -1,0 +1,59 @@
+#@layout("防封管理")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/gfw/save">
+        <input type="hidden" name="sysGfw.id"  value="#(sysGfw.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysGfw.appName"  placeholder="请输入应用名称" value="#(sysGfw.appName ??)">
+            </div>
+            <div class="layui-form-mid layui-word-aux">随便起名请不要重复</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用类型</label>
+            <div class="layui-input-inline">
+                <select name="sysGfw.appType">
+                	#for(item : joyDict.getDictList('app_type'))
+                  	<option value="#(item.dictValue)" #if(sysGfw!=null && item.dictValue==(sysGfw.appType.toString())) selected="selected" #end >#(item.dictName)</option>
+                  	#end
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">区分自己还是其他</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">主域名</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysGfw.masterUrl"  placeholder="请输入主域名" value="#(sysGfw.masterUrl ??)">
+            </div>
+            <div class="layui-form-mid layui-word-aux">主要访问地址</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">从域名</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysGfw.slaveUrl"  placeholder="请输入从域名" value="#(sysGfw.slaveUrl ??)">
+            </div>
+            <div class="layui-form-mid layui-word-aux">备用地址,没有请和主域名一致</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中段url</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysGfw.varUrl"  placeholder="请输入中段url" value="#(sysGfw.varUrl ??)">
+            </div>
+            <div class="layui-form-mid layui-word-aux">地址可变标识</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入备注" class="layui-textarea" name="sysGfw.description">#(sysGfw.description ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end

@@ -1,0 +1,43 @@
+#include("../common/header.html")
+<body>
+	<div id="container">
+		<img src="#(shareQrImage)" style="width:100%;height:100%;"/>
+		<img src="#(shareQrImage)" class="qrcode" />
+		<div class="shareBtn" onclick="share()">立即分享</div>
+		<div class="shareShadow" style="display: none;" onclick="closeShare()"></div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(document)[0].title="邀请好友";
+	function share(){
+		$(".qrcode").css("display","block")
+		$(".shareShadow").css("display","block")
+	}
+	function closeShare(){
+		$(".qrcode").css("display","none")
+		$(".shareShadow").css("display","none")
+	}
+
+	var triggerEvent = "touchstart"; //指定下载方式
+
+	function saveAs(Url){
+	    var blob=new Blob([''], {type:'application/octet-stream'});
+	    var url = URL.createObjectURL(blob);
+	    var a = document.createElement('a');
+	    a.href = Url;
+	    a.download = Url.replace(/(.*\/)*([^.]+.*)/ig,"$2").split("?")[0];
+	    var e = document.createEvent('MouseEvents');
+	    e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	    a.dispatchEvent(e);
+	    URL.revokeObjectURL(url);
+	}
+
+	var imgs = $(".qrcode");
+	for(var i = 0,o;o = imgs[i];i++){
+		o.addEventListener(triggerEvent,function(){
+			var url = this.getAttribute("src");
+			saveAs(url);
+		},false);
+	}
+
+</script>

@@ -1,0 +1,69 @@
+#@layout("充值二维码")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>微信充值二维码</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+            	<div class="pull-left layui-form-pane timo-search-box">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">充值金额</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="qrCode.transAmt" value="#(qrCode.transAmt ??)" placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right screen-btn-group">
+                	#if(joyConfig.getConfigValue('WAP_WXPAY_QRCODE','')??)
+                    <button class="layui-btn open-popup" data-title="已上传无额二维码" data-url="#(ctxAd)/recharge/qrcode/addNoAmt"  data-size="400,320">已上传无额二维码</button>
+                    <button class="layui-btn open-popup" data-title="添加定额二维码" data-url="#(ctxAd)/recharge/qrcode/add"   data-size="500,380"><i class="fa fa-plus"></i>上传定额二维码</button>
+                	#else
+                    <button class="layui-btn layui-btn-danger open-popup" data-title="添加无额二维码" data-url="#(ctxAd)/recharge/qrcode/addNoAmt"  data-size="400,320"><i class="fa fa-plus"></i>上传无额二维码</button>
+                	#end
+                </div>
+            </div>
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox"><i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th data-field="qrCodeImage">二维码</th>
+                    <th data-field="transAmt">充值设置金额</th>
+                    <th data-field="transAmt">实际充值金额</th>
+                    <th class="sortable" data-field="createTime">创建时间</th>
+                    <th class="sortable" data-field="updateTime">更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+	                <tr >
+	                    <td><label class="timo-checkbox"><input type="checkbox" value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+                        <td><img alt="图像" src="#image(item.qrcodeImage)"></td>
+                        <td>#(item.ruleTransAmt)</td>
+                        <td>#(item.transAmt)</td>
+	                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+	                    <td>#date(item.updateTime, "yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                            <a class="ajax-get" data-msg="您是否确定删除" href="#(ctxAd)/recharge/qrcode/delete?ids=#(item.id)">删除</a>
+                        </td>
+	                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

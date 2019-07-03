@@ -1,0 +1,231 @@
+#include("../common/header.html")
+<style type="text/css">
+	.exchange{
+		position:fixed;
+		padding:2vw 0 0;
+		top:50%;
+		border-radius: 16px;
+		left:50%;
+		transform: translate(-50%,-50%);
+		width:60vw;
+		color:#333;
+		background:#ffffff;
+	}
+	.exchange>p:nth-child(1){
+		display:block;
+		padding:8px 6vw;
+		text-align: center;
+		font-size:20px;
+	}
+	.exchange>p:nth-child(2){
+		padding:0 6vw;
+	}
+	.exchangeY{
+		margin-top:12px;
+		border-top:1px solid #eee;
+	}
+	.exchangecancel,.exchangeconfirm{
+		width:50%;
+		text-align:center;
+		padding:10px 0 ;
+		box-sizing: border-box;
+	}
+	.exchangecancel{
+		border-right:1px solid #eee;
+	}
+</style>
+<body>
+	<div id="container" style="background-color:#ffffff">
+		#if(joyConfig.getAdvImage(1) ??)
+		<img class="chats" style="position:fixed;top:7vw;right:0;width:20%;" src="#(ctxWapSt)/h5css/images/contact_me.png" onclick="window.location.href='#(ctx)/wap/member/chat'">
+		#end
+		<div class="user column">
+			#-- 
+			<img class="avatar" src="#(yaMember.headimgurl ?? ctxWapSt+'/h5css/images/user.png')" alt="">
+			 --#
+			<img class="avatar" src="#(yaMember.headimgurl)" alt="">
+			<div class="mylevel">普通会员</div>
+			<span style="max-width:30vw;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">#(yaMember.nickname ??)</span>
+		</div>
+		<div class="mycoin between">
+			<div class="coinL column">
+				<span class="coinName">我的奖品</span>
+				<div class='num flex'>
+					<img class="myrouge" src="#(ctxWapSt)/h5css/images/rouge.png" alt="">
+					<span id="rouge">#(goodsOrderCount ?? 0)</span>
+				</div>
+			</div>
+			<span class="line"></span>
+			<div class="coinR column">
+				<span class="coinName">我的游戏币</span>
+				<div class='num flex'>
+					<span>#(gameAccount.avbAmt.toInt() ?? 0)<text class="unit">个</text></span>
+				</div>
+			</div>
+		</div>
+		<div class="items between" onclick="window.location.href='#(ctx)/wap/member/recharge'">
+			<div>充值记录</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		<div class="items between" onclick="window.location.href='#(ctx)/wap/member/game'">
+			<div>游戏记录</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		<div class="items between" onclick="window.location.href='#(ctx)/wap/member/prize'">
+			<div>我的奖品</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		#if(receivingAddr>0)
+		<div class="items between" onclick="window.location.href='#(ctx)/wap/member/addr'" >
+			<div>收货账号(闯关成功后必须上传账号截图)</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		#end
+		<!-- 
+		<div class="items between IsWeiXin" style="border:none" >
+			<div>收货地址(闯关成功后必须填写)</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		 -->
+		#if(giftGoodsList ?? && giftGoodsList.size()>0)
+		<div class="items between" onclick="window.location.href='#(ctx)/wap/member/gift'" >
+			<div>赠送奖品(请选择您的赠品)</div>
+			<img src="#(ctxWapSt)/h5css/images/right.png" alt="">
+		</div>
+		#end
+		<div class="online"></div>
+		
+		#if(settAccount ??)
+		<div class="profit between">
+			<div class="profitL flex">
+				<span>推广收益：</span>
+				<text style="color:#FC6AA9">#number(settAccount.avbAmt,"#.##")元</text>
+			</div>	
+			<div class="flex">
+				<div class="profitR transfers" style="margin-right:0.5rem">转账到余额</div>		
+				<div class="profitR cashmoney" cashtype="1">提现</div>		
+			</div>
+		</div>		
+		<div class="online"></div>
+		<div class="distribute flex">
+			<div class="column" onclick="window.location.href='#(ctx)/wap/member/distribute'">
+				<img src="#(ctxWapSt)/h5css/images/2.png" alt="">
+				<span>分销明细</span>
+			</div>
+			<div class="column" onclick="window.location.href='#(ctx)/wap/member/cash'">
+				<img src="#(ctxWapSt)/h5css/images/3.png" alt="">
+				<span>提现记录</span>
+			</div>
+			<div class="column" onclick="window.location.href='#(ctx)/wap/member/group'">
+				<img src="#(ctxWapSt)/h5css/images/4.png" alt="">
+				<span>我的团队</span>
+			</div>
+			<div class="column" style="border-right:0;" onclick="window.location.href='#(ctx)/wap/member/share'">
+				<img src="#(ctxWapSt)/h5css/images/5.png" alt="">
+				<span>邀请好友</span>
+			</div>
+		</div>
+		#end
+		<img class="vip" src="#image(joyConfig.getAdvImage(3),'/static/default/wap/h5css/images/red.png')" onclick="window.location.href='#(ctx)/wap/recommend/rule'">
+	</div>
+	<div class="shadow" style="display:none"></div>
+	<div class="exchange" style="display:none">
+		<!-- <div class="closeNotices" style="top:-1rem;" onclick="closeCash(this)" id="cash">✕</div> -->
+		<p>温馨提示</p>
+		<p>提成转到余额后，余额只能用于闯关消费，不可转回 #if(rewardGame>0)(额外奖励#(rewardGame)个币)#end</p>
+		<div class="flex exchangeY">
+			<div class="exchangecancel">取消</div>
+			<div class="exchangeconfirm">确认</div>
+		</div>
+	</div>
+	<div class="notices" id="cashs" style="display: none;">
+		<div class="closeNotices" onclick="closeCash(this)" id="cash">✕</div>
+		<div class="content a">
+			#if(settAccount ?? && settAccount.avbAmt >= joyConfig.getConfigValue('SYS_ALLOW_CASH','5').toDouble())
+				<div style="text-align:center;margin-top:3vw;">您可提现金额为 #(settAccount.avbAmt)元</div>
+				<div style="background:#FB1F7F;width:40vw;height:10vw;line-height:10vw;border-radius: 5vw;margin:6vw  auto 3vw;text-align:center;color:#ffffff;" id="cashmoney" cashtype="1">继续提现</div>
+			#else
+				<div style="text-align:center;margin-top:3vw;">最低提现金额#(joyConfig.getConfigValue('SYS_ALLOW_CASH','5'))元</div>
+				<div style="background:#FB1F7F;width:40vw;height:10vw;line-height:10vw;border-radius: 5vw;margin:6vw  auto 3vw;text-align:center;color:#ffffff;" onclick="closeCash(this)">知道了</div>
+			#end
+		</div>
+	</div>
+	<script type="text/javascript">
+
+	//判断是否是微信浏览器的函数
+	$(".IsWeiXin").click(function(){
+		//window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+		var ua = window.navigator.userAgent.toLowerCase();
+		//通过正则表达式匹配ua中是否含有MicroMessenger字符串
+		if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+			openAddress()
+		}else{
+			window.location.href='#(ctx)/wap/member/addr'
+		}
+	})
+	$(".cashmoney").click(function(){
+		$(".shadow").css("display","none");
+		$("#cashs").css("display","block");
+		$("#container").addClass("blur");
+		$(".footer").addClass("blur");
+	})
+	function closeCash(obj){
+		$(".shadow").css("display","none");
+		$("#cashs").css("display","none");
+		$("#container").removeClass("blur");
+		$(".footer").removeClass("blur");
+	}
+	$("#cashmoney").click(function(){
+		var type = $(this).attr('cashtype')
+		if(type==1){
+			window.location.href='#(ctx)/wap/recommend/order';
+		}else{
+			$.ajax({
+				type: "GET",
+				url: "#(ctx)/wap/recommend/order",
+				dataType: "json",
+				success: function(data){
+					console.log("cash",data)
+					layer.msg(data.msg);
+					window.closeCash()
+					location.reload();
+				}
+			});
+		}
+	})
+	$(".transfers").click(function(){
+		$(".exchange").show()
+		$(".shadow").show()
+		$(".shadow").css("z-index","1")
+		$(".exchange").css("z-index","2")
+		$(".shadow").css("background-color", "hsla(0, 0%, 0%, 0.6)")
+	})
+	$(".exchangecancel").click(function(){
+		$(".exchange").hide()
+		$(".shadow").hide()
+	})
+	$(".exchangeconfirm").click(function(){
+		var minAmt = #(joyConfig.getConfigValue('SYS_ALLOW_TRANSFER','5'));
+		var accAmt = #(settAccount.avbAmt ?? 0);
+		if(minAmt > accAmt){
+			layer.msg("兑换失败!最小转账额度为:"+minAmt);
+			return;
+		}
+		
+		$.ajax({
+				type: "GET",
+				url: "#(ctx)/wap/recharge/order/transfer",
+				dataType: "json",
+				success: function(data){
+					layer.msg(data.msg);
+					if(data.code==200){
+						setTimeout("location.reload();",1000);
+					}
+				}
+		})
+	})
+
+	</script>
+	#include("../common/footer.html")
+</body>
+</html>

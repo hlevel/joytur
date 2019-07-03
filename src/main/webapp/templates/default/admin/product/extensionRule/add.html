@@ -1,0 +1,38 @@
+#@layout("添加推广活动")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/extension/rule/save">
+        <input type="hidden" name="extensionRule.id"  value="#(extensionRule.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动类型</label>
+            <div class="layui-input-inline">
+                <select name="extensionRule.extensionType">
+                	#for(item : joyDict.getDictList('extension_type'))
+                  	<option value="#(item.dictValue)" #if(extensionRule!=null && item.dictValue==(extensionRule.extensionType.toString())) selected="selected" #end >#(item.dictName)</option>
+                  	#end
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖励游戏币</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="extensionRule.recAmount"  placeholder="奖励游戏币" value="#(extensionRule.recAmount ??)">
+            </div>
+            <div class="layui-form-mid layui-word-aux">推广活动奖励</div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="extensionRule.status" value="1" title="开启" #if(extensionRule != null && extensionRule.status==1) checked #end>
+                <input type="radio" name="extensionRule.status" value="0" title="禁用" #if(!extensionRule??) checked #end #if(extensionRule != null && extensionRule.status==0) checked #end>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end

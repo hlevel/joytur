@@ -1,0 +1,197 @@
+#@layout("后台主页")
+
+#define css()
+	<style>
+        .widget-small{
+            background-color: #FFFFFF;
+            overflow: hidden;
+            text-align: center;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+        }
+        .widget-small .fa{
+            float: left;
+            width: 40%;
+            line-height: 80px;
+            color: #FFFFFF;
+        }
+        .widget-user .fa{
+            background-color: #029789;
+        }
+        .widget-visit .fa{
+            background-color: #17a2b8;
+        }
+        .widget-message .fa{
+            background-color: #fbad4c;
+        }
+        .widget-like .fa{
+            background-color: #ff646d;
+        }
+        .widget-small-info{
+            float: left;
+            text-align: left;
+            width: 40%;
+            margin-left: 20px;
+            margin-top: 18px;
+            line-height: 24px;
+        }
+        .widget-small-info h4{
+            font-size: 18px;
+        }
+        .widget-small-info span{
+            font-size: 16px;
+        }
+        .project-introduce{
+            min-height: 466px;
+        }
+        .project-introduce a{
+            color: #005980;
+        }
+        .project-introduce h4{
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+        .project-introduce li{
+            list-style: decimal;
+            margin-left: 28px;
+        }
+    </style>
+#end
+
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md3 layui-col-sm6 layui-col-xs12">
+            <div class="widget-small widget-user">
+                <i class="icon fa fa-users fa-3x"></i>
+                <div class="widget-small-info">
+                    <h4>今日新增用户</h4>
+                    <span>#(memberCount??0)</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md3 layui-col-sm6 layui-col-xs12">
+            <div class="widget-small widget-visit">
+                <i class="icon fa fa-money fa-3x"></i>
+                <div class="widget-small-info">
+                    <h4>今日充值金额</h4>
+                    <span>#(rechargeCount??0)</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md3 layui-col-sm6 layui-col-xs12">
+            <div class="widget-small widget-message">
+                <i class="icon fa fa-credit-card-alt fa-3x"></i>
+                <div class="widget-small-info">
+                    <h4>待提现订单</h4>
+                    <span>#(recommendCount??0)</span>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md3 layui-col-sm6 layui-col-xs12">
+            <div class="widget-small widget-like">
+                <i class="icon fa fa-pencil-square fa-3x"></i>
+                <div class="widget-small-info">
+                    <h4>待发货订单</h4>
+                    <span>#(goodsCount??0)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+        	<div class="layui-row layui-col-space15">
+        		<div class="layui-col-md12" >
+        			<div class="layui-card">
+		                <div class="layui-card-header">配置指南</div>
+		                <div class="layui-card-body">
+		                    <table class="layui-table" lay-even="" lay-skin="nob">
+						      <tbody>
+						        <tr>
+						          <th>1.系统管理-系统设置-防封设置-配置主域名</th>
+						        </tr>
+						        <tr>
+						          <td>2.微信管理-公众号管理-配置公众号(接入信息,菜单管理,授权域名)</td>
+						        </tr>
+						        <tr>
+						          <td>3.产品运营-配置配置闯关规则,配置商品,配置代理分成,配置充值规则</td>
+						        </tr>
+						        <tr>
+						          <td>4.产品运营-收款二维码-上传无额二维码</td>
+						        </tr>
+						        <tr>
+						          <td>5.产品运营-收款监控-配置邮箱规则</td>
+						        </tr>
+						      </tbody>
+						    </table>
+		                </div>
+		            </div>
+        		</div>
+        	</div>
+        	<!-- 
+        	<div class="layui-row layui-col-space15">
+        		<div class="layui-col-md12" >
+        			<div class="layui-card">
+		                <div class="layui-card-header">代办事项</div>
+		                <div class="layui-card-body">
+		                    <table class="layui-table" lay-even="" lay-skin="nob">
+						      <tbody>
+						        <tr>
+						          <th>1.dddd</th>
+						        </tr>
+						        <tr>
+						          <td>2.操作系统</td>
+						        </tr>
+						        <tr>
+						          <td>3.系统架构</td>
+						        </tr>
+						        <tr>
+						          <td>4.启动时间</td>
+						        </tr>
+						        <tr>
+						          <td>5.运行时长</td>
+						        </tr>
+						      </tbody>
+						    </table>
+		                </div>
+		            </div>
+        		</div>
+        	</div>
+        	 -->
+        </div>
+        
+        <div class="layui-col-md4">
+        	<div class="layui-card">
+                <div class="layui-card-header">项目访问</div>
+                <div class="layui-card-body">
+                	<img alt="口红机商城" src="#(ctxAd)/subscribe/wapQrCode" />
+                </div>
+            </div>
+        	<div class="layui-card">
+                <div class="layui-card-header">常见问题</div>
+                <div class="layui-card-body">
+					<div class="layui-collapse">
+						<div class="layui-colla-item">
+					    	<h2 class="layui-colla-title">问题1</h2>
+				    		<div class="layui-colla-content">内容区域</div>
+						</div>
+						<div class="layui-colla-item">
+					    	<h2 class="layui-colla-title">问题2</h2>
+					    	<div class="layui-colla-content">内容区域</div>
+						</div>
+						<div class="layui-colla-item">
+					    	<h2 class="layui-colla-title">问题3</h2>
+					    	<div class="layui-colla-content">内容区域</div>
+						</div>
+					</div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</body>
+#end

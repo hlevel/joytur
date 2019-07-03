@@ -1,0 +1,30 @@
+#@layout("角色编辑")
+#define main()
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/role/save" >
+        <input type="hidden" name="sysRole.id" value="#(sysRole.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色编码</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysRole.roleCode"  placeholder="请输入角色编码" value="#(sysRole.roleCode ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysRole.roleName"  placeholder="请输入角色名称" value="#(sysRole.roleName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">角色备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入备注" class="layui-textarea" name="sysRole.description" >#(sysRole.description ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+#end

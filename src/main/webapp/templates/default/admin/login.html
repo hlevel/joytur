@@ -1,0 +1,31 @@
+#@layout("登录")
+#define main()
+<body class="layui-layout-login">
+	<div class="login-bg">
+		<div class="cover"></div>
+	</div>
+	<div class="login-content">
+		<h1 class="login-box-title">
+			<i class="fa fa-fw fa-user"></i>登录
+		</h1>
+		<form class="layui-form" action="#(ctxAd)/login/authen" method="post">
+			<div class="layui-form-item">
+				<label class="layui-icon layui-icon-username" for="username"></label>
+				<input class="layui-input" type="text" name="username" value="" id="username" placeholder="用户名">
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-icon layui-icon-password" for="password"></label>
+				<input class="layui-input" type="password" name="password" value="" id="password" placeholder="密码">
+			</div>
+
+			<div class="layui-form-item">
+				<input type="checkbox" name="rememberMe" title="记住我(公共场所慎用)" lay-skin="primary"> <a class="layui-layout-right forget-password" href="javascript:alert('请联系超级管理员！')">忘记密码?</a>
+			</div>
+			<button type="submit" class="layui-btn layui-btn-fluid ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-sign-in fa-lg fa-fw"></i> 登录 </button>
+		</form>
+	</div>
+</body>
+#end
+#define js()
+	<script src="#(ctxAdSt)/js/login.js" charset="utf-8"></script>
+#end

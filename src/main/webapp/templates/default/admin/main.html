@@ -1,0 +1,78 @@
+#@layout("主页")
+#define main()
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!-- 导航栏 -->
+    <div class="layui-header">
+        <a href="#" class="layui-logo">
+            <span class="layui-logo-mini">#(joyConfig.getConfigValue('SYS_CONFIG_NAME','JoyTur'))</span>
+            <span class="layui-logo-lg">#(joyConfig.getConfigValue('SYS_CONFIG_NAME','JoyTur'))</span>
+        </a>
+        <a class="side-toggle layui-layout-left" href="#">
+            <i class="layui-icon layui-icon-shrink-right"></i>
+            <i class="layui-icon layui-icon-spread-left"></i>
+        </a>
+        <ul class="layui-nav layui-layout-right">
+            <!--<li class="layui-nav-item timo-search">
+              <input class="timo-search-input" type="search" placeholder="搜索">
+              <button class="timo-search-button"><i class="fa fa-search"></i></button>
+            </li>-->
+            <li class="layui-nav-item">
+                <a href="#">
+                    <i class="fa fa-bell-o fa-lg"></i>
+                </a>
+            </li>
+            <li class="layui-nav-item">
+                <a class="timo-screen-full" href="#">
+                    <i class="fa layui-icon layui-icon-screen-full"></i>
+                </a>
+            </li>
+            <li class="layui-nav-item timo-nav-user">
+                <a class="timo-header-nickname">#(yaAdmin.nickname ??)</a>
+                <div class="layui-nav-child">
+                    <div class="timo-nav-child-box">
+                        <div><a class="open-popup" data-title="个人信息" data-url="#(ctxAd)/formUserInfo" data-size="680,464"><i class="fa fa-user-o"></i>个人信息</a></div>
+                        <div><a class="open-popup" data-title="修改密码" data-url="#(ctxAd)/formEditPwd" data-size="456,296"><i class="fa fa-lock" style="font-size:17px;width:12px;"></i>修改密码</a></div>
+                        <div><a href="#(ctxAd)/logout"><i class="fa fa-power-off"></i>退出登录</a></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <div class="layui-side-user">
+                <img class="layui-side-user-avatar open-popup" data-url="#(ctxAd)/formUserInfo" data-size="680,464" src="#image(user.headimgUrl ??)" alt="头像" />
+                <div>
+                    <p class="layui-side-user-name" >#(yaAdmin.nickname ??)</p>
+                    <p class="layui-side-user-designation">在线</p>
+                </div>
+            </div>
+			<ul class="layui-nav layui-nav-tree" lay-filter="layui-nav-side">
+				#for(item : menuList)
+				<li class="layui-nav-item">
+					<a href="javascript:;" lay-url="#(item.url ? item.url:'#')"><i class="#(item.icon ? item.icon : 'fa fa-gavel')"></i><span class="layui-nav-title">#(item.title)</span>#if(item.childSysMenuList ??)<span class="layui-nav-more"></span>#end</a>
+					#if(item.childSysMenuList ??)
+					<dl class="layui-nav-child">
+						#for(citem : item.childSysMenuList)
+						<dd><a href="javascript:;" lay-url="#(citem.url ? citem.url:'#')"><span class="layui-nav-title">#(citem.title)</span></a></dd>
+						#end
+					</dl>
+					#end
+				</li>
+				#end
+			</ul>
+		</div>
+    </div>
+    <!-- 主体区域 -->
+    <div class="layui-body layui-tab layui-tab-brief" lay-allowclose="true" lay-filter="iframe-tabs">
+        <!-- 标签栏 -->
+        <ul class="layui-tab-title"></ul>
+        <!-- 内容区域 -->
+        <div class="layui-tab-content"></div>
+    </div>
+</div>
+</body>
+#end

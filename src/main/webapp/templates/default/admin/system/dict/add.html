@@ -1,0 +1,38 @@
+#@layout("字典管理")
+#define main()
+<body>
+<div class="layui-form timo-compile">
+    <form action="#(ctxAd)/dict/save">
+        <input type="hidden" name="sysDictionary.id"  value="#(sysDictionary.id ??)"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典标识</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysDictionary.dictCode"  placeholder="请输入字典键名" value="#(sysDictionary.dictCode ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典标题</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysDictionary.dictName"  placeholder="请输入字典标题" value="#(sysDictionary.dictName ??)">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典值</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" type="text" name="sysDictionary.dictValue"  placeholder="请输入字典值" value="#(sysDictionary.dictValue ??)">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入备注" class="layui-textarea" name="sysDictionary.description">#(sysDictionary.description ??)</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item timo-finally">
+            <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i> 保存</button>
+            <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+        </div>
+    </form>
+</div>
+</body>
+#end

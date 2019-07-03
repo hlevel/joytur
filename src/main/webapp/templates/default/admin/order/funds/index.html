@@ -1,0 +1,93 @@
+#@layout("会员账单")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>会员账单</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+                <div class="pull-left layui-form-pane timo-search-box">
+                	<div class="layui-inline">
+                        <label class="layui-form-label">账户类型</label>
+                        <div class="layui-input-block timo-search-status">
+                            <select class="timo-search-select" name="accountFunds.accType" >
+                            	<option value="">选择</option>
+                            	#for(item : quyAccType)
+                            	<option value="#(item.dictValue)" #if(accountFunds.accType!=null && item.dictValue==(accountFunds.accType.toString())) selected="selected" #end >#(item.dictName)</option>
+                            	#end
+                            </select>
+                        </div>
+                    </div>
+                	<div class="layui-inline">
+                        <label class="layui-form-label">资金成分</label>
+                        <div class="layui-input-block timo-search-status">
+                            <select class="timo-search-select" name="accountFunds.eleType" >
+                            	<option value="">选择</option>
+                            	#for(item : joyDict.getDictList('account_funds_ele'))
+                            	<option value="#(item.dictValue)" #if(accountFunds.eleType!=null && item.dictValue==(accountFunds.eleType.toString())) selected="selected" #end >#(item.dictName)</option>
+                            	#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">openId</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="accountFunds.openid" value="#(accountFunds.openid ??)" placeholder="请输入openid" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">用户呢称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="accountFunds.nickName" value="#(accountFunds.nickName ??)" placeholder="请输入用户呢称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox"><i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th>openid</th>
+                    <th>用户昵称</th>
+                    <th>账户类型</th>
+                    <th>交易金额</th>
+                    <th>交易成分</th>
+                    <th>交易前</th>
+                    <th>交易后</th>
+                    <th>交易描述</th>
+                    <th>交易时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+                <tr>
+                    <td><label class="timo-checkbox"><input type="checkbox" value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+                    <td>#(item.openid)</td>
+                    <td>#(item.nickName)</td>
+                    <td>#(joyDict.getDictLabel(item.accType.toString(),'account_acc_type','未知'))</td>
+                    <td>#(joyDict.getDictLabel(item.transType.toString(),'account_funds_transtype','未知'))&nbsp;#number(item.transAmt,"#.###")</td>
+                    <td>#(joyDict.getDictLabel(item.eleType.toString(),'account_funds_ele','未知'))</td>
+                    <td>#number(item.befAmt,"#.###")</td>
+                    <td>#number(item.aftAmt,"#.###")</td>
+                    <td>#(item.description)</td>
+                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

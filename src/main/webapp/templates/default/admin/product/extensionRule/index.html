@@ -1,0 +1,77 @@
+#@layout("推广活动")
+#define main()
+<body class="timo-layout-page">
+    <div class="layui-card">
+        <div class="layui-card-header timo-card-header">
+            <span><i class="fa fa-bars"></i>推广活动列表</span>
+            <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row timo-card-screen">
+                <div class="pull-left layui-form-pane timo-search-box">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">活动类型</label>
+                        <div class="layui-input-block timo-search-status">
+                            <select class="timo-search-select" name="extensionRule.extensionType" >
+                            	<option value="">选择</option>
+                            	#for(item : joyDict.getDictList('extension_type'))
+                            	<option value="#(item.dictValue)" #if(extensionRule.extensionType!=null && item.dictValue==extensionRule.extensionType.toString()) selected="selected" #end >#(item.dictName)</option>
+                            	#end
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn timo-search-btn">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right screen-btn-group">
+                    <button class="layui-btn open-popup" data-title="添加推广活动" data-url="#(ctxAd)/extension/rule/add"  data-size="460,357"><i class="fa fa-plus"></i> 添加</button>
+                    <div class="btn-group">
+                        <button class="layui-btn">操作<span class="caret"></span></button>
+                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                            <dd><a class="ajax-status" href="#(ctxAd)/extension/rule/status/1" >启用</a></dd>
+                            <dd><a class="ajax-status" href="#(ctxAd)/extension/rule/status/0" >禁用</a></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <table class="layui-table timo-table">
+                <thead>
+                <tr>
+                    <th class="timo-table-checkbox">
+                        <label class="timo-checkbox"><input type="checkbox"><i class="layui-icon layui-icon-ok"></i></label>
+                    </th>
+                    <th>活动名称</th>
+                    <th>奖励游戏币</th>
+                    <th>状态</th>
+                    <th class="sortable" data-field="createTime">创建时间</th>
+                    <th class="sortable" data-field="updateTime">更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                #for(item : page.list)
+	                <tr >
+	                    <td><label class="timo-checkbox"><input type="checkbox" value="#(item.id)"><i class="layui-icon layui-icon-ok"></i></label></td>
+	                    <td>#(joyDict.getDictLabel(item.extensionType.toString(),'extension_type','未知'))</td>
+	                    <td>#number(item.recAmount)</td>
+                        <td>#(joyDict.getDictLabel(item.status.toString(),'status','未知'))</td>
+	                    <td>#date(item.createTime, "yyyy-MM-dd HH:mm:ss")</td>
+	                    <td>#date(item.updateTime, "yyyy-MM-dd HH:mm:ss")</td>
+                        <td>
+                            <a class="open-popup popup-edit" data-title="编辑活动" data-url="#(ctxAd)/extension/rule/edit?id=#(item.id)"  data-size="460,357" href="#">编辑</a>
+                            <a class="ajax-get" data-msg="您是否确定删除" href="#(ctxAd)/extension/rule/delete?ids=#(item.id)">删除</a>
+                        </td>
+	                </tr>
+                #end
+                </tbody>
+            </table>
+            <!-- page -->
+            #include("../../common/page.html", url=pageUrl)
+            <!-- page end -->
+        </div>
+    </div>
+</body>
+#end

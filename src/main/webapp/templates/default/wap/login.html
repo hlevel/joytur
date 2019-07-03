@@ -1,0 +1,194 @@
+#include("common/header.html")
+<style type="text/css">
+	.Code{
+		width:30vw!important;
+		height: 12vw!important;
+		line-height: 12vw!important;
+		padding:0;
+		display: inline-block;
+	}
+	input{
+		font-size:16px;
+	}
+</style>
+<body>
+	<div id="container" style="background:url(#(ctxWapSt)/h5css/images/Logo.jpg) no-repeat;background-size: 100% 100%">
+		<img class="logintitle" src="#(ctxWapSt)/h5css/images/title.png">
+		<div class="column login edit_Password" style="display: none;">
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/shouji.png">
+				<input type="number" placeholder="请输入您的11位手机号码" name="mobile">
+			</div>
+			<div class="between mobileCode">
+				<div class="loginitem loginitem1 flex">
+					<img src="#(ctxWapSt)/h5css/images/dunpai.png">
+					<input type="number" placeholder="请输入验证码" name="code">
+				</div>
+				<input class="Code" type="button" id="btn"  value="获取验证码"></input>
+			</div>
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/suo.png">
+				<input type="password" placeholder="请输入新密码" name="passwd">
+			</div>
+			<div class="editPassword change">修改密码</div>
+			<div class="loginweb flex">
+				<div class="login_web">立即登陆</div>
+			</div>
+		</div>
+		<div class="column login goregister" style="display: none">
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/shouji.png">
+				<input type="number" placeholder="请输入您的11位手机号码" name="mobile">
+			</div>
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/suo.png">
+				<input type="password" placeholder="请输入您的密码" name="passwd">
+			</div>
+			<div class="between mobileCode">
+				<div class="loginitem loginitem1 flex">
+					<img src="#(ctxWapSt)/h5css/images/dunpai.png">
+					<input type="number" placeholder="请输入验证码" name="code">
+				</div>
+				<input class="Code" type="button" id="btn" value="获取验证码" ></input>
+			</div>
+			<input type="hidden" name="pid" value="{$pid}">
+			<div class="editPassword zhuce">立即注册</div>
+			<div class="loginweb flex">
+				<div class="logins">立即登陆</div>
+			</div>
+		</div>
+		<div class="column login go_login" style="display: inline-block">
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/shouji.png">
+				<input type="number" placeholder="请输入您的11位手机号码" name="mobile">
+			</div>
+			<div class="loginitem flex">
+				<img src="#(ctxWapSt)/h5css/images/suo.png">
+				<input type="password" placeholder="请输入您的密码" name="passwd">
+			</div>
+			<div class="editPassword denglu">立即登陆</div>
+			<div class="loginOrregister between">
+				<div class="no_login">没账号？去注册</div>
+				<div class="forget_pass">忘记密码</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var countdown=60
+	$(".no_login").click(function(){
+		$(".goregister").css("display","inline-block");
+		$(".go_login").css("display","none");
+	})
+	$(".forget_pass").click(function(){
+		$(".edit_Password").css("display","inline-block");
+		$(".go_login").css("display","none");
+	})
+	$(".logins").click(function(){
+		$(".go_login").css("display","inline-block");
+		$(".goregister").css("display","none");
+	})
+	$(".login_web").click(function(){
+		$(".go_login").css("display","inline-block");
+		$(".edit_Password").css("display","none");
+	})
+	
+	$(".Code").click(function(val){
+		var mobile = $(this).parent().parent().find('input[name="mobile"]').val();
+        var that=this
+		$.ajax({
+            type: "POST",
+            url: "{php echo $this->createMobileUrl('login',array('act'=>message));php}",
+            data: {mobile:mobile},
+            dataType: "json",
+            success: function(data){
+                layer.msg(data.msg);
+                console.log(mobile,mobile=='')
+	            if(mobile!=''&&mobile!=undefined){
+					clearInterval(window.timer)
+					countdown=60
+					$(".Code").val("获取验证码")
+					$(".Code").removeAttr("disabled");
+	                window.settime(that)
+                }
+            }
+        });
+	})
+	function settime(val){
+		clearInterval(window.timer)
+		if(countdown==0){
+			clearInterval(val.timer)
+			val.removeAttribute("disabled");
+		    val.value="获取验证码";
+		    countdown=60
+		}else{
+			val.value="重新发送(" + countdown + ")";	
+			window.timer=setInterval(function(){
+				val.setAttribute("disabled", true);
+				countdown--
+				settime(val)
+			},1000)
+		}
+	}
+	$(".zhuce").click(function(){
+		var mobile = $('.goregister input[name="mobile"]').val();
+		var passwd = $('.goregister input[name="passwd"]').val();
+		var code = $('.goregister input[name="code"]').val();
+		var pid = $('.goregister input[name="pid"]').val();
+
+		$.ajax({
+            type: "POST",
+            url: "{php echo $this->createMobileUrl('login',array('act'=>register));php}",
+            data: {mobile:mobile,passwd:passwd,code:code,pid:pid},
+            dataType: "json",
+            success: function(data){
+                layer.msg(data.msg);
+                if(data.code==1){
+                	$('.edit_Password').hide();
+                	$('.goregister').hide();
+                	$('.go_login').show();
+                }
+            }
+        });
+	})
+
+	$(".change").click(function(){
+		var mobile = $('.edit_Password input[name="mobile"]').val();
+		var passwd = $('.edit_Password input[name="passwd"]').val();
+		var code = $('.edit_Password input[name="code"]').val();
+
+		$.ajax({
+            type: "POST",
+            url: "{php echo $this->createMobileUrl('login',array('act'=>forget));php}",
+            data: {mobile:mobile,passwd:passwd,code:code},
+            dataType: "json",
+            success: function(data){
+                layer.msg(data.msg);
+                if(data.code==1){
+                	$('.edit_Password').hide();
+                	$('.goregister').hide();
+                	$('.go_login').show();
+                }
+            }
+        });
+	})
+	$(".denglu").click(function(){
+		var mobile = $('.go_login input[name="mobile"]').val();
+		var passwd = $('.go_login input[name="passwd"]').val();
+		
+		$.ajax({
+	        type: "POST",
+	        url: "{php echo $this->createMobileUrl('login',array('act'=>login));php}",
+	        data: {mobile:mobile,passwd:passwd},
+	        dataType: "json",
+	        success: function(data){
+	            layer.msg(data.msg);
+	            if(data.code==1){
+	            	location.href="{php echo $this->createMobileUrl('index');php}"
+	            }
+	        }
+	    });
+	})
+
+
+</script>

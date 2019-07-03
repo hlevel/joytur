@@ -1,0 +1,24 @@
+#@layout("打款处理")
+#define main()
+<div class="layui-form timo-compile">
+	<form action="#(ctxAd)/recommend/order/paycashfinish" >
+		<div style="text-align: center; font-size: 20px;">
+			<input type="hidden" name="id" value="#(recommendOrder.id ??)"/>
+			#if(!view??)
+			付款给用户(#(wechatMember.nickName ??)) <font color="red">#(recommendOrder.transAmt)</font>元
+			#else
+			用户(#(wechatMember.nickName ??))
+			#end
+			<div style="text-align: center; ">
+				<img class="layui-side-user-avatar" src="#(payImg)" width="200" height="200" style="margin: 0 auto;" />	
+			</div>
+		</div>
+		#if(!view??)
+		<div class="layui-form-item timo-finally" style="text-align: center;">
+	         <button class="layui-btn ajax-submit" lay-submit lay-filter="ajax-submit"><i class="fa fa-check-circle"></i>打款完成</button>
+			 <button class="layui-btn btn-secondary close-popup"><i class="fa fa-times-circle"></i> 关闭</button>
+	     </div>
+	     #end
+     </form>
+</div>
+#end

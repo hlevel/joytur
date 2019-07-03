@@ -1,0 +1,75 @@
+#include("../common/header.html")
+<style type="text/css">
+	.title{
+		overflow:hidden;
+		text-overflow: ellipsis;    
+		white-space: nowrap;
+    	width: 90%;
+	}
+	
+	.giftdoo{
+	    width: 94%;
+	    padding: 0 3% 3.4rem;
+	    display: flex;
+	    flex-wrap: wrap;
+	    background: #FEF2F6;
+	    padding-top: 1.4rem;
+	}
+	
+	.giftgoods {
+	    width: 29.3%;
+	    margin: 0 2%;
+	    text-align: center;
+	    margin-bottom: 1.0rem;
+	}
+</style>
+<body>
+	<div id="container">
+		<div class="top" style="text-align: center;" >
+		充值满奖品金额闯关未成功也送,请选择要赠品
+		</div>
+		<div class="giftdoo" >
+			#for(g : goodsList)
+			<div class="giftgoods" gid="#(g.id)" >
+        		<div class="goodsdetail column">
+        		<img src="#image(g.goodsImage)" alt="">
+        		<div class="marketprice">市场价￥#(g.mktPrice)</div>
+        		<div class="title">#(g.goodsName)</div>
+        		<div class="model">#(g.recommend)</div>
+        		</div>
+        		<div class="btn">选择此赠品</div>
+        	</div>
+        	#end
+			<!-- 
+       		<p style="text-align: center;width:100%;font-size:15px;color:#333">暂无数据</p>
+			 -->        	
+       	</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function (){
+		$('.btn').click(function(){
+			var gid = $(this).parent().attr('gid');
+			
+			layer.confirm('您确定选择当前赠品?', {
+				btn: ['确定','取消'] //按钮
+			}, function(){
+				$.ajax({
+					type: "GET",
+					url: "#(ctx)/wap/member/giftsuc",
+					data:{'gid':gid},
+					dataType: "json",
+					success: function(data){
+						if(data.code == 200){
+							setTimeout('window.location.href="#(ctx)/wap/member"',2000);
+							layer.msg(data.msg, {icon: 1});
+						}else{
+							layer.msg(data.msg, {icon: 2});
+						}
+					}
+				});
+			});
+		})
+	 });
+</script>
+</html>
