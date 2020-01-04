@@ -1,4 +1,4 @@
-# joytur(欢乐转盘)
+# joytur(欢乐转盘)  
 
 ## 介绍
 
@@ -10,7 +10,7 @@ joytur是在Jfinal undertow 1.6 基础上搭建的一个Java项目 简单易学�
 项目参考很多优秀开源项目优点并且集合优点,可以找到影子, 目前包括以下四大模块
 系统管理（system）模块、微信管理（wechat）模块、产品管理（system）模块、订单管理（system）模块
 
-作者邮箱 hlevel@qq.com  
+作者邮箱 hlevel@qq.com  gitee: https://gitee.com/hlevel/joytur
 
 ## 内置基础功能
 
