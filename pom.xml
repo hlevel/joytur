@@ -36,7 +36,7 @@
 		<oshi.version>3.13.0</oshi.version>
 		<jna.version>5.2.0</jna.version>
 		
-		<junit.version>4.5</junit.version>
+		<junit.version>4.13.1</junit.version>
 	</properties>
 	
 	<!-- 使用阿里 maven 库 -->
