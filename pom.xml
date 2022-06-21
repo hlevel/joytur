@@ -24,7 +24,7 @@
 		<fastjson.version>1.2.54</fastjson.version>
 		<ehcache.version>2.6.10</ehcache.version>
 		<druid.version>1.0.29</druid.version>
-		<mysql.version>5.1.46</mysql.version>
+		<mysql.version>8.0.28</mysql.version>
 		<hutool.vesion>4.4.0</hutool.vesion>
 		<jwt.version>3.3.0</jwt.version>
 		<logback.version>1.2.3</logback.version>
